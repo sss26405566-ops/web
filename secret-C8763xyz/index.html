@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026–2027 日本跨年之旅｜東北銀山溫泉・C109・河口湖與伊豆自駕</title>
+  <!-- 載入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 載入 FontAwesome 圖示庫 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- 載入 Google Fonts 思源黑體與 Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <script>
+    // =========================================================================
+    // 🎨 【主題顏色自訂區】目前為「冬日雪景藍 × 溫泉暖琥珀」質感配色
+    // =========================================================================
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Inter"', '"Noto Sans TC"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* 手風琴平滑展開/收合動畫 */
+    .accordion-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .accordion-content.open {
+      grid-template-rows: 1fr;
+    }
+    .accordion-inner {
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-100 selection:text-brand-900 pb-20">
+
+  <!-- 頂部 Banner 區塊 -->
+  <header class="relative bg-gradient-to-br from-slate-900 via-brand-900 to-indigo-950 text-white overflow-hidden shadow-xl">
+    <!-- 背景冬日雪景光暈裝飾 -->
+    <div class="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 rounded-full bg-sky-400/15 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 -mb-16 -ml-16 w-60 h-60 rounded-full bg-amber-400/10 blur-2xl pointer-events-none"></div>
+
+    <div class="max-w-3xl mx-auto px-5 pt-10 pb-9 relative z-10">
+      <!-- 日期與天數膠囊標籤 -->
+      <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-medium text-sky-200 mb-3">
+        <span id="trip-dates" class="bg-white/10 backdrop-blur-md border border-white/15 px-3.5 py-1 rounded-full flex items-center gap-1.5">
+          <!-- JS 自動填入 -->
+        </span>
+        <span id="trip-duration" class="bg-amber-500/20 text-amber-200 border border-amber-400/30 px-3 py-1 rounded-full font-semibold">
+          <!-- JS 自動填入 -->
+        </span>
+      </div>
+
+      <!-- 主標題與副標題 -->
+      <h1 id="trip-title" class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-2.5 leading-snug text-white">
+        <!-- JS 自動填入 -->
+      </h1>
+      <p id="trip-subtitle" class="text-slate-300 text-sm sm:text-base mb-6">
+        <!-- JS 自動填入 -->
+      </p>
+
+      <!-- 底部資訊列與控制按鈕 -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-white/15">
+        <!-- 旅程亮點標籤 -->
+        <div class="flex items-center gap-2 flex-wrap text-xs text-sky-100/90">
+          <span class="bg-white/10 px-2.5 py-1 rounded-md"><i class="fa-solid fa-train mr-1 text-sky-300"></i>JR PASS 東日本</span>
+          <span class="bg-white/10 px-2.5 py-1 rounded-md"><i class="fa-solid fa-torii-gate mr-1 text-rose-300"></i>C109 跨年</span>
+          <span class="bg-white/10 px-2.5 py-1 rounded-md"><i class="fa-solid fa-car mr-1 text-amber-300"></i>河口湖・伊豆自駕</span>
+        </div>
+
+        <!-- 全部展開 / 全部收合按鈕 -->
+        <button id="toggle-all-btn" onclick="toggleAllDays()" class="self-start sm:self-auto bg-white text-slate-900 hover:bg-sky-50 active:scale-95 transition-all text-xs sm:text-sm font-bold px-4 py-2 rounded-xl shadow-md flex items-center gap-2 cursor-pointer">
+          <i id="toggle-all-icon" class="fa-solid fa-angles-down text-brand-600 transition-transform duration-300"></i>
+          <span id="toggle-all-text">全部展開</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主要內容區 -->
+  <main class="max-w-3xl mx-auto px-4 sm:px-5 -mt-5 relative z-20">
+    
+    <!-- 雙分頁切換 Tabs -->
+    <div class="bg-white p-1.5 rounded-2xl shadow-md border border-slate-200/80 flex gap-1.5 mb-6">
+      <button onclick="switchTab('itinerary')" id="tab-itinerary" class="flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all bg-brand-600 text-white shadow-sm cursor-pointer">
+        📅 每日行程總覽
+      </button>
+      <button onclick="switchTab('info')" id="tab-info" class="flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:bg-slate-100 cursor-pointer">
+        🏨 住宿・交通・清單總整理
+      </button>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- 分頁一：每日行程總覽 (手風琴 Accordion 展開卡片)                        -->
+    <!-- ===================================================================== -->
+    <section id="view-itinerary" class="space-y-4">
+      <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+        <span><i class="fa-solid fa-circle-info text-brand-500 mr-1"></i>點擊每日卡片可展開詳細時間軸、訂房網頁與 Google 地圖</span>
+      </div>
+
+      <!-- 每日行程卡片由 JS 動態渲染 -->
+      <div id="itinerary-container" class="space-y-3.5"></div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 分頁二：住宿・交通・清單總整理                                         -->
+    <!-- ===================================================================== -->
+    <section id="view-info" class="hidden space-y-6">
+      
+      <!-- 1. 重要交通票券與自駕資訊 -->
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2 mb-4">
+          <span class="w-8 h-8 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center text-sm">
+            <i class="fa-solid fa-route"></i>
+          </span>
+          航班・JR PASS・自駕租車資訊
+        </h2>
+        <div id="transport-container" class="space-y-4">
+          <!-- JS 動態生成 -->
+        </div>
+      </div>
+
+      <!-- 2. 住宿總覽卡片區 (7 間住宿完整列表) -->
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2 mb-1">
+          <span class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm">
+            <i class="fa-solid fa-bed"></i>
+          </span>
+          全程住宿總覽（共 10 晚）
+        </h2>
+        <p class="text-xs text-slate-500 mb-4 pl-10">可一鍵複製飯店名稱或地址，方便輸入導航或海關申報單</p>
+        <div id="accommodations-container" class="space-y-3.5">
+          <!-- JS 動態生成 -->
+        </div>
+      </div>
+
+      <!-- 3. 旅伴行前檢查清單 (支援 localStorage 自動儲存勾選) -->
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-list-check"></i>
+            </span>
+            旅伴行前檢查清單
+          </h2>
+          <button onclick="resetChecklist()" class="text-xs text-slate-400 hover:text-rose-500 underline cursor-pointer">
+            重設全部勾選
+          </button>
+        </div>
+        <p class="text-xs text-slate-500 mb-4 pl-10">勾選進度會自動儲存在你的手機/電腦瀏覽器中</p>
+        <div id="checklist-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <!-- JS 動態生成 -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- 複製成功提示 Toast -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-medium px-4 py-2.5 rounded-full shadow-xl opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-2">
+    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+    <span id="toast-msg">已複製到剪貼簿！</span>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- 🛠️ 【旅遊手冊資料設定區】日後只需修改這裡的資料，就能輕鬆更新網頁內容！   -->
+  <!-- ======================================================================= -->
+  <script>
+    // 1. 旅程基本設定
+    const tripConfig = {
+      title: "2026–2027 日本跨年之旅｜東北銀山溫泉・C109・河口湖與伊豆自駕",
+      subtitle: "橫跨關東、東北銀山溫泉雪景、東京跨年與富士山伊豆自駕的 11 日冬日假期",
+      dates: "2026/12/26 (六) – 2027/01/05 (二)",
+      duration: "11 天 10 夜"
+    };
+
+    // 2. 每日行程資料 (11 天完整行程)
+    const itineraryData = [
+      {
+        day: "Day 1",
+        date: "2026/12/26 (六)",
+        title: "抵達東京・淺草入住",
+        defaultOpen: true, // 預設展開第一天
+        items: [
+          {
+            time: "13:00",
+            category: "航班",
+            name: "桃園國際機場 第二航廈（出發）",
+            note: "建議提前 2.5～3 小時（約 10:00–10:30）抵達桃園機場第二航廈辦理登機與行李託運。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=桃園國際機場第二航廈"
+          },
+          {
+            time: "20:30",
+            category: "航班",
+            name: "抵達東京成田國際機場（NRT）",
+            note: "辦理入境手續、領取行李，並至 JR 東日本旅行服務中心兌換／領取「JR PASS 東日本周遊券」，隨後搭乘 Skyliner 或 Access 特急前往淺草。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=成田國際機場"
+          },
+          {
+            time: "晚間",
+            category: "住宿",
+            name: "入住東京住宿：unito ASAKUSA",
+            note: "Hotel Residence Asakusa by unito（淺草區域），辦理入住休息，為明日前往東北做準備。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=Hotel+Residence+Asakusa+by+unito",
+            linkUrl: "https://www.agoda.com/zh-tw/hotel-residence-asakusa-by-unito/hotel/taito-ku-jp.html?cid=1844104&ds=i8YsThGvGyUKkuJ2",
+            linkText: "Agoda 訂房頁面"
+          }
+        ]
+      },
+      {
+        day: "Day 2",
+        date: "2026/12/27 (日)",
+        title: "啟用 JR PASS 東日本・前往銀山溫泉",
+        defaultOpen: false,
+        items: [
+          {
+            time: "上午",
+            category: "交通",
+            name: "啟用 JR PASS 東日本周遊券・搭乘新幹線北上",
+            note: "從上野／東京站搭乘山形新幹線（つばさ Tsubasa 號）前往山形／大石田站，再轉乘接駁巴士前往銀山溫泉。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=大石田駅"
+          },
+          {
+            time: "下午",
+            category: "住宿",
+            name: "入住銀山溫泉：銀山莊（Ginzanso）",
+            note: "享受夢幻的冬日銀山溫泉雪景與日式溫泉旅館一泊二食（記得提前確認飯店接駁車時間）。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=銀山温泉+銀山荘",
+            linkUrl: "https://www.ginzanso.jp/chinese/",
+            linkText: "銀山莊中文官網"
+          }
+        ]
+      },
+      {
+        day: "Day 3",
+        date: "2026/12/28 (一)",
+        title: "移動至宮城縣仙台市區",
+        defaultOpen: false,
+        items: [
+          {
+            time: "白天",
+            category: "交通",
+            name: "銀山溫泉退房・搭乘 JR 前往仙台",
+            note: "退房後搭巴士返回大石田站，使用 JR PASS 轉乘新幹線／仙山線前往東北第一大城「仙台市」。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=仙台駅"
+          },
+          {
+            time: "下午",
+            category: "住宿",
+            name: "入住仙台住宿：KOKO HOTEL Sendai Kotodai Park",
+            note: "位於仙台市中心勾當台公園附近，鄰近一番町商店街與國分町美食區，連住兩晚（12/28–12/29）。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=KOKO+HOTEL+Sendai+Kotodai+Park",
+            linkUrl: "https://www.polaris-hotels.com/",
+            linkText: "飯店集團官網"
+          }
+        ]
+      },
+      {
+        day: "Day 4",
+        date: "2026/12/29 (二)",
+        title: "仙台自由探索（連住第二晚）",
+        defaultOpen: false,
+        items: [
+          {
+            time: "全日",
+            category: "活動",
+            name: "仙台市區／周邊自由活動",
+            note: "可善用 JR PASS 安排日本三景「松島」、藏王狐狸村，或是在仙台市區大啖厚切牛舌、毛豆奶昔（待後續補充細節）。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=仙台市"
+          },
+          {
+            time: "晚間",
+            category: "住宿",
+            name: "續住：KOKO HOTEL Sendai Kotodai Park",
+            note: "仙台連住第二晚。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=KOKO+HOTEL+Sendai+Kotodai+Park"
+          }
+        ]
+      },
+      {
+        day: "Day 5",
+        date: "2026/12/30 (三)",
+        title: "返回東京・東京鐵塔周邊住宿",
+        defaultOpen: false,
+        items: [
+          {
+            time: "白天",
+            category: "交通",
+            name: "搭乘東北新幹線返回東京市區",
+            note: "退房後從仙台站搭乘東北新幹線（はやぶさ Hayabusa 號）快速返回東京。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=東京駅"
+          },
+          {
+            time: "下午",
+            category: "住宿",
+            name: "入住東京跨年住宿：【離東京鐵塔很近】東京都心民宿",
+            note: "位於東京都心安靜區域，步行 4 分鐘即可抵達最近車站，連住 12/30–12/31 兩晚。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=東京鐵塔",
+            linkUrl: "https://www.airbnb.com.tw/rooms/1103254122766692464?unique_share_id=b308cdae-228d-49cf-b994-929513d556af&viralityEntryPoint=1&s=76&source_impression_id=p3_1794154109_P3_4kdIk-xfsOWdM",
+            linkText: "Airbnb 房源連結"
+          }
+        ]
+      },
+      {
+        day: "Day 6",
+        date: "2026/12/31 (四)",
+        title: "Comic Market 109 (C109) ＆ 跨年夜",
+        defaultOpen: false,
+        items: [
+          {
+            time: "全日",
+            category: "活動",
+            name: "參加 Comic Market 109（C109）",
+            note: "地點：東京國際展示場（Tokyo Big Sight）。冬コミ海邊風大非常寒冷，務必做好防寒保暖，並提前準備好入場門票／手環。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=東京國際展示場+Tokyo+Big+Sight"
+          },
+          {
+            time: "晚間",
+            category: "住宿",
+            name: "返回東京鐵塔周邊民宿跨年（續住第二晚）",
+            note: "跨年夜可散步至東京鐵塔或增上寺周邊感受日本跨年氣氛！",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=東京鐵塔"
+          }
+        ]
+      },
+      {
+        day: "Day 7",
+        date: "2027/01/01 (五)",
+        title: "元旦取車自駕・前往河口湖",
+        defaultOpen: false,
+        items: [
+          {
+            time: "上午",
+            category: "租車",
+            name: "東京租車取車：NISSAN 租車 武藏新城站前店",
+            note: "地址：2 Chome-15-15 Kamishinjo, Nakahara Ward, Kawasaki, Kanagawa 211-0045日本。⚠️ 取車必備：台灣駕照正本、駕照日文譯本、護照、預約確認單。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=2+Chome-15-15+Kamishinjo,+Nakahara+Ward,+Kawasaki,+Kanagawa+211-0045",
+            linkUrl: "https://tc.tabirai.net/car/kanagawa/company/nissan/branch/?PID=1948",
+            linkText: "Tabirai 租車店鋪資訊"
+          },
+          {
+            time: "下午",
+            category: "住宿",
+            name: "自駕前往山梨縣・入住河口湖班鄉間別墅飯店",
+            note: "Kawaguchiko Country Cottage Ban，享受富士山腳下的森林度假別墅風情。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=Kawaguchiko+Country+Cottage+Ban",
+            linkUrl: "https://www.trip.com/w/dtdNO2lM5X2",
+            linkText: "Trip.com 訂房連結"
+          }
+        ]
+      },
+      {
+        day: "Day 8",
+        date: "2027/01/02 (六)",
+        title: "自駕前往伊豆・包場溫泉與暖桌民宿",
+        defaultOpen: false,
+        items: [
+          {
+            time: "白天",
+            category: "交通",
+            name: "河口湖退房・自駕前往靜岡縣伊豆半島",
+            note: "沿途可欣賞富士山景，一路南下前往伊豆高原・大室山與城崎海岸區域。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=大室山"
+          },
+          {
+            time: "下午",
+            category: "住宿",
+            name: "入住伊豆住宿：包場溫泉與暖桌｜大室山城崎包場客房套房",
+            note: "距離海邊 1 分鐘路程（2 間臥室、2 間廁所），富戶站附近（提供富戶站免費接送），連住 1/2–1/3 兩晚。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=城ヶ崎海岸+富戸駅",
+            linkUrl: "https://www.airbnb.com.tw/rooms/44198916?guests=1&adults=1&s=67&unique_share_id=643d9260-7f78-4a92-a9fa-94045ed31472",
+            linkText: "Airbnb 房源連結"
+          }
+        ]
+      },
+      {
+        day: "Day 9",
+        date: "2027/01/03 (日)",
+        title: "伊豆半島自駕遊（連住第二晚）",
+        defaultOpen: false,
+        items: [
+          {
+            time: "全日",
+            category: "活動",
+            name: "伊豆半島自由探索（大室山・城崎海岸・伊東）",
+            note: "推薦搭乘大室山登山纜車俯瞰火山口與相模灣、走訪城崎海岸門脇吊橋、品嚐伊豆金目鯛海鮮料理（待後續補充細節）。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=城ヶ崎海岸+門脇つり橋"
+          },
+          {
+            time: "晚間",
+            category: "住宿",
+            name: "續住：大室山城崎包場客房套房",
+            note: "在暖桌裡吃橘子、享受私人包場溫泉，放鬆身心！",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=城ヶ崎海岸+富戸駅"
+          }
+        ]
+      },
+      {
+        day: "Day 10",
+        date: "2027/01/04 (一)",
+        title: "返回神奈川川崎・還車與入住",
+        defaultOpen: false,
+        items: [
+          {
+            time: "白天",
+            category: "租車",
+            name: "從伊豆自駕返回神奈川縣・歸還 NISSAN 租車",
+            note: "還車前請記得在店鋪附近的加油站加滿油（Regular 汽油），並保留最後一張加油收據供店員確認。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=2+Chome-15-15+Kamishinjo,+Nakahara+Ward,+Kawasaki,+Kanagawa+211-0045"
+          },
+          {
+            time: "下午",
+            category: "住宿",
+            name: "入住川崎住宿：Nesthotel alt Kawasaki Station",
+            note: "Nest Hotel alt 川崎站前（原 Hotel Mid In Kawasaki Ekimae），交通便利，周邊百貨商場林立可做最後採買。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=Nest+Hotel+alt+Kawasaki+Station",
+            linkUrl: "https://www.booking.com/hotel/jp/hotel-mid-in-kawasaki-ekimae.zh-tw.html",
+            linkText: "Booking.com 訂房頁面"
+          }
+        ]
+      },
+      {
+        day: "Day 11",
+        date: "2027/01/05 (二)",
+        title: "銀座かつかみ 頂級炸豬排午宴・返程",
+        defaultOpen: false,
+        items: [
+          {
+            time: "午餐",
+            category: "美食",
+            name: "銀座かつかみ（Ginza Katsukami）頂級炸豬排套餐",
+            note: "米其林推薦的板前炸豬排專門店，預約享用【ランチ】かつかみフルコース（午間全套套餐）。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=銀座かつかみ",
+            linkUrl: "https://katsukami.com/ginza-katsukami_jp_02.html",
+            linkText: "銀座かつかみ官網",
+            // 專屬精緻菜單明細卡片
+            menuTitle: "🍽️【ランチ】かつかみフルコース 完整菜單",
+            menuItems: [
+              "前菜",
+              "ヒレカツ（菲力炸豬排）",
+              "本日の赤身のカツ①（今日紅肉炸豬排①）",
+              "本日の赤身のカツ②（今日紅肉炸豬排②）",
+              "メンチカツ（炸肉餅）",
+              "お口直し（清口小點）",
+              "きた福の蟹コロッケ（北福螃蟹可樂餅）",
+              "お好みのカツ1種（自選炸物 1 種｜到店四選一：●天然アワビのコロッケ 天然鮑魚可樂餅 / ●本日の豚の希少部位 今日豬肉稀有部位 / ●越塚のコンビーフ 越塚鹹牛肉 / ●季節のスペシャル食材 季節特別食材）",
+              "本日のロース系カツ①（今日里肌系炸豬排①）",
+              "本日のロース系カツ②（今日里肌系炸豬排②）",
+              "お食事（主食）",
+              "デザート（甜點）"
+            ]
+          },
+          {
+            time: "下午／晚間",
+            category: "航班",
+            name: "前往機場辦理登機返程",
+            note: "滿載戰利品與美好回憶返回台灣（待後續補充回程班機時間與航廈）。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=成田國際機場"
+          }
+        ]
+      }
+    ];
+
+    // 3. 交通票券、航班與自駕總整理資料
+    const transportData = [
+      {
+        badge: "去程航班",
+        badgeColor: "bg-sky-100 text-sky-700",
+        title: "2026/12/26 (六) 桃園 (TPE) T2 ➔ 東京成田 (NRT)",
+        details: "13:00 桃園機場第二航廈出發 ➔ 20:30 抵達東京成田機場（建議 10:30 前抵達機場）。",
+        copyText: "",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=桃園國際機場第二航廈"
+      },
+      {
+        badge: "鐵路周遊券",
+        badgeColor: "bg-emerald-100 text-emerald-700",
+        title: "JR PASS 東日本鐵路周遊券（12/27 啟用）",
+        details: "12/26 晚間於成田機場領取兌換，12/27 正式啟用搭乘新幹線前往大石田（銀山溫泉）、仙台及返回東京。",
+        copyText: "",
+        mapUrl: ""
+      },
+      {
+        badge: "自駕租車",
+        badgeColor: "bg-amber-100 text-amber-800",
+        title: "NISSAN 租車 武藏新城站前店（1/1 取車 ～ 1/4 還車）",
+        details: "地址：2 Chome-15-15 Kamishinjo, Nakahara Ward, Kawasaki, Kanagawa 211-0045日本（取車必備：台灣駕照正本＋日文譯本＋護照）。",
+        copyText: "2 Chome-15-15 Kamishinjo, Nakahara Ward, Kawasaki, Kanagawa 211-0045日本",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=2+Chome-15-15+Kamishinjo,+Nakahara+Ward,+Kawasaki,+Kanagawa+211-0045",
+        linkUrl: "https://tc.tabirai.net/car/kanagawa/company/nissan/branch/?PID=1948"
+      }
+    ];
+
+    // 4. 全程住宿總覽資料 (7 間住宿)
+    const accommodationsData = [
+      {
+        dates: "12/26 (六)｜1 晚",
+        area: "東京・淺草",
+        name: "unito ASAKUSA (Hotel Residence Asakusa by unito)",
+        note: "抵達首晚住宿，方便隔日一早前往上野搭新幹線。",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=Hotel+Residence+Asakusa+by+unito",
+        bookingUrl: "https://www.agoda.com/zh-tw/hotel-residence-asakusa-by-unito/hotel/taito-ku-jp.html?cid=1844104&ds=i8YsThGvGyUKkuJ2"
+      },
+      {
+        dates: "12/27 (日)｜1 晚",
+        area: "山形・銀山溫泉",
+        name: "銀山莊 (Ginzanso)",
+        note: "冬日溫泉旅館一泊二食，享受絕美銀山雪景。",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=銀山温泉+銀山荘",
+        bookingUrl: "https://www.ginzanso.jp/chinese/"
+      },
+      {
+        dates: "12/28 (一) – 12/29 (二)｜2 晚",
+        area: "宮城・仙台市區",
+        name: "KOKO HOTEL Sendai Kotodai Park",
+        note: "鄰近勾當台公園與一番町商店街，吃牛舌逛街超方便。",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=KOKO+HOTEL+Sendai+Kotodai+Park",
+        bookingUrl: "https://www.polaris-hotels.com/"
+      },
+      {
+        dates: "12/30 (三) – 12/31 (四)｜2 晚",
+        area: "東京・東京鐵塔周邊",
+        name: "【離東京鐵塔很近】東京都心民宿",
+        note: "步行 4 分鐘抵達最近車站，跨年與 C109 期間據點。",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=東京鐵塔",
+        bookingUrl: "https://www.airbnb.com.tw/rooms/1103254122766692464?unique_share_id=b308cdae-228d-49cf-b994-929513d556af&viralityEntryPoint=1&s=76&source_impression_id=p3_1794154109_P3_4kdIk-xfsOWdM"
+      },
+      {
+        dates: "01/01 (五)｜1 晚",
+        area: "山梨・河口湖",
+        name: "河口湖班鄉間別墅飯店 (Kawaguchiko Country Cottage Ban)",
+        note: "自駕首日入住富士山腳下的森林度假別墅。",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=Kawaguchiko+Country+Cottage+Ban",
+        bookingUrl: "https://www.trip.com/w/dtdNO2lM5X2"
+      },
+      {
+        dates: "01/02 (六) – 01/03 (日)｜2 晚",
+        area: "靜岡・伊豆大室山",
+        name: "包場溫泉與暖桌｜大室山城崎包場客房套房",
+        note: "距離海邊 1 分鐘路程（2 間臥室、2 間廁所），富戶站免費接送。",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=城ヶ崎海岸+富戸駅",
+        bookingUrl: "https://www.airbnb.com.tw/rooms/44198916?guests=1&adults=1&s=67&unique_share_id=643d9260-7f78-4a92-a9fa-94045ed31472"
+      },
+      {
+        dates: "01/04 (一)｜1 晚",
+        area: "神奈川・川崎站前",
+        name: "Nesthotel alt Kawasaki Station",
+        note: "還車後入住川崎站前飯店，方便隔日前往銀座與機場。",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=Nest+Hotel+alt+Kawasaki+Station",
+        bookingUrl: "https://www.booking.com/hotel/jp/hotel-mid-in-kawasaki-ekimae.zh-tw.html"
+      }
+    ];
+
+    // 5. 旅伴行前檢查清單資料
+    const checklistItems = [
+      "護照（確認效期 6 個月以上）",
+      "Visit Japan Web 填寫並截圖 QR Code",
+      "台灣駕照正本 ＋ 駕照日文譯本（1/1 自駕必備！）",
+      "JR PASS 東日本兌換憑證",
+      "Comic Market 109 (C109) 入場證／手環",
+      "冬季保暖衣物（銀山溫泉雪地防滑鞋／暖暖包）",
+      "日本上網卡 / eSIM 開通確認",
+      "日幣現金與海外高回饋信用卡"
+    ];
+
+
+    // =========================================================================
+    // ⚙️ 【系統渲染與互動邏輯區】以下程式碼負責生成畫面與互動功能，無需修改
+    // =========================================================================
+
+    // 分類標籤對應樣式與圖示
+    const categoryConfig = {
+      "航班": { style: "bg-sky-50 text-sky-700 border-sky-200", icon: "fa-plane" },
+      "交通": { style: "bg-teal-50 text-teal-700 border-teal-200", icon: "fa-train" },
+      "住宿": { style: "bg-indigo-50 text-indigo-700 border-indigo-200", icon: "fa-bed" },
+      "活動": { style: "bg-rose-50 text-rose-700 border-rose-200", icon: "fa-star" },
+      "租車": { style: "bg-amber-50 text-amber-800 border-amber-200", icon: "fa-car" },
+      "美食": { style: "bg-orange-50 text-orange-700 border-orange-200", icon: "fa-utensils" },
+      "預設": { style: "bg-slate-100 text-slate-700 border-slate-200", icon: "fa-location-dot" }
+    };
+
+    function initApp() {
+      renderHeader();
+      renderItinerary();
+      renderTransport();
+      renderAccommodations();
+      renderChecklist();
+      updateToggleAllButtonState();
+    }
+
+    // 渲染頂部 Banner
+    function renderHeader() {
+      document.title = tripConfig.title;
+      document.getElementById('trip-title').textContent = tripConfig.title;
+      document.getElementById('trip-subtitle').textContent = tripConfig.subtitle;
+      document.getElementById('trip-dates').innerHTML = `<i class="fa-regular fa-calendar"></i> ${tripConfig.dates}`;
+      document.getElementById('trip-duration').textContent = tripConfig.duration;
+    }
+
+    // 渲染每日行程手風琴卡片
+    function renderItinerary() {
+      const container = document.getElementById('itinerary-container');
+
+      container.innerHTML = itineraryData.map((dayObj, dayIndex) => {
+        const isOpen = dayObj.defaultOpen;
+
+        const timelineHTML = dayObj.items.map((item, itemIndex) => {
+          const cat = categoryConfig[item.category] || categoryConfig["預設"];
+          const isLast = itemIndex === dayObj.items.length - 1;
+
+          // 若該行程有專屬菜單明細 (如 Day 11 銀座かつかみ)
+          const menuHTML = item.menuItems ? `
+            <div class="mt-3 mb-3 bg-amber-50/70 border border-amber-200/80 rounded-xl p-3.5">
+              <div class="text-xs sm:text-sm font-bold text-amber-900 mb-2 pb-1.5 border-b border-amber-200/70">
+                ${item.menuTitle}
+              </div>
+              <ol class="space-y-1.5 text-xs text-slate-700 list-decimal list-inside">
+                ${item.menuItems.map(m => `<li class="leading-relaxed">${m}</li>`).join('')}
+              </ol>
+            </div>
+          ` : '';
+
+          return `
+            <div class="relative pl-6 sm:pl-8 ${isLast ? '' : 'pb-6'}">
+              <!-- 時間軸垂直線 -->
+              ${!isLast ? '<div class="absolute left-[11px] sm:left-[15px] top-3 bottom-0 w-0.5 bg-slate-200"></div>' : ''}
+              
+              <!-- 時間軸節點圓圈 -->
+              <div class="absolute left-1 sm:left-2 top-1.5 w-3.5 h-3.5 rounded-full bg-brand-600 border-2 border-white shadow-sm"></div>
+
+              <!-- 節點卡片 -->
+              <div class="bg-slate-50/90 hover:bg-slate-100/70 transition-colors rounded-xl p-3.5 sm:p-4 border border-slate-200/80">
+                <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                  <span class="text-xs sm:text-sm font-bold text-brand-800 bg-brand-100/80 px-2.5 py-0.5 rounded-md font-mono">
+                    ${item.time}
+                  </span>
+                  <span class="text-xs font-semibold px-2 py-0.5 rounded-md border flex items-center gap-1 ${cat.style}">
+                    <i class="fa-solid ${cat.icon} text-[10px]"></i> ${item.category}
+                  </span>
+                </div>
+
+                <h4 class="text-sm sm:text-base font-bold text-slate-800 mb-1.5 leading-snug">
+                  ${item.name}
+                </h4>
+
+                ${item.note ? `<p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">${item.note}</p>` : ''}
+
+                ${menuHTML}
+
+                <!-- 操作按鈕列 (Google 地圖 & 相關連結) -->
+                <div class="flex flex-wrap items-center gap-2 pt-1">
+                  ${item.mapUrl ? `
+                    <a href="${item.mapUrl}" target="_blank" rel="noopener noreferrer" 
+                       class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 border border-slate-200 px-3 py-1.5 rounded-lg shadow-2xs transition-all active:scale-95">
+                      <i class="fa-solid fa-location-dot text-rose-500"></i>
+                      開啟 Google 地圖
+                    </a>
+                  ` : ''}
+
+                  ${item.linkUrl ? `
+                    <a href="${item.linkUrl}" target="_blank" rel="noopener noreferrer" 
+                       class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 px-3 py-1.5 rounded-lg shadow-2xs transition-all active:scale-95">
+                      <i class="fa-solid fa-link"></i>
+                      ${item.linkText || '相關連結'}
+                    </a>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <article class="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden">
+            <!-- 手風琴可點擊標題列 -->
+            <button onclick="toggleDay(${dayIndex})" aria-expanded="${isOpen}" 
+                    class="w-full text-left px-4 sm:px-5 py-4 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors cursor-pointer select-none">
+              <div class="flex items-center gap-3 sm:gap-3.5 min-w-0">
+                <div class="shrink-0 bg-slate-900 text-white font-bold text-xs sm:text-sm px-3 py-1.5 rounded-xl text-center min-w-[62px]">
+                  ${dayObj.day}
+                </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-semibold text-brand-600 mb-0.5">
+                    ${dayObj.date}
+                  </div>
+                  <h3 class="text-sm sm:text-base md:text-lg font-bold text-slate-800 truncate">
+                    ${dayObj.title}
+                  </h3>
+                </div>
+              </div>
+
+              <div class="shrink-0 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
+                <i id="arrow-${dayIndex}" class="fa-solid fa-chevron-down text-xs transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}"></i>
+              </div>
+            </button>
+
+            <!-- 展開內容 -->
+            <div id="content-${dayIndex}" class="accordion-content ${isOpen ? 'open' : ''}">
+              <div class="accordion-inner">
+                <div class="px-4 sm:px-5 pb-5 pt-3 border-t border-slate-100">
+                  ${timelineHTML}
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // 切換單日展開/收合
+    function toggleDay(index) {
+      const content = document.getElementById(`content-${index}`);
+      const arrow = document.getElementById(`arrow-${index}`);
+      const isOpen = content.classList.contains('open');
+
+      if (isOpen) {
+        content.classList.remove('open');
+        arrow.classList.remove('rotate-180');
+      } else {
+        content.classList.add('open');
+        arrow.classList.add('rotate-180');
+      }
+      updateToggleAllButtonState();
+    }
+
+    // 全部展開 / 全部收合
+    function toggleAllDays() {
+      const contents = document.querySelectorAll('.accordion-content');
+      const anyClosed = Array.from(contents).some(el => !el.classList.contains('open'));
+
+      contents.forEach((content, idx) => {
+        const arrow = document.getElementById(`arrow-${idx}`);
+        if (anyClosed) {
+          content.classList.add('open');
+          arrow.classList.add('rotate-180');
+        } else {
+          content.classList.remove('open');
+          arrow.classList.remove('rotate-180');
+        }
+      });
+      updateToggleAllButtonState();
+    }
+
+    function updateToggleAllButtonState() {
+      const contents = document.querySelectorAll('.accordion-content');
+      const allOpen = Array.from(contents).every(el => el.classList.contains('open'));
+      const btnText = document.getElementById('toggle-all-text');
+      const btnIcon = document.getElementById('toggle-all-icon');
+      
+      btnText.textContent = allOpen ? '全部收合' : '全部展開';
+      if (allOpen) {
+        btnIcon.classList.add('rotate-180');
+      } else {
+        btnIcon.classList.remove('rotate-180');
+      }
+    }
+
+    // 雙分頁切換
+    function switchTab(tabName) {
+      const viewItinerary = document.getElementById('view-itinerary');
+      const viewInfo = document.getElementById('view-info');
+      const tabItinerary = document.getElementById('tab-itinerary');
+      const tabInfo = document.getElementById('tab-info');
+
+      if (tabName === 'itinerary') {
+        viewItinerary.classList.remove('hidden');
+        viewInfo.classList.add('hidden');
+        tabItinerary.className = "flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all bg-brand-600 text-white shadow-sm cursor-pointer";
+        tabInfo.className = "flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:bg-slate-100 cursor-pointer";
+      } else {
+        viewItinerary.classList.add('hidden');
+        viewInfo.classList.remove('hidden');
+        tabInfo.className = "flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all bg-brand-600 text-white shadow-sm cursor-pointer";
+        tabItinerary.className = "flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:bg-slate-100 cursor-pointer";
+      }
+    }
+
+    // 渲染分頁二：交通與自駕資訊
+    function renderTransport() {
+      const container = document.getElementById('transport-container');
+      container.innerHTML = transportData.map(t => `
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+            <span class="text-xs font-bold px-2.5 py-0.5 rounded-md ${t.badgeColor}">${t.badge}</span>
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-800 mb-1">${t.title}</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">${t.details}</p>
+          <div class="flex flex-wrap gap-2">
+            ${t.mapUrl ? `
+              <a href="${t.mapUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-rose-50 hover:text-rose-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors">
+                <i class="fa-solid fa-location-dot text-rose-500"></i> 開啟 Google 地圖
+              </a>
+            ` : ''}
+            ${t.copyText ? `
+              <button onclick="copyText('${t.copyText.replace(/'/g, "\\'")}', '已複製地址')" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors cursor-pointer">
+                <i class="fa-regular fa-copy"></i> 複製英文地址
+              </button>
+            ` : ''}
+            ${t.linkUrl ? `
+              <a href="${t.linkUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 px-3 py-1.5 rounded-lg transition-colors">
+                <i class="fa-solid fa-link"></i> 店鋪網頁
+              </a>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 渲染分頁二：住宿總覽卡片
+    function renderAccommodations() {
+      const container = document.getElementById('accommodations-container');
+      container.innerHTML = accommodationsData.map(h => `
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
+          <div class="space-y-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-xs font-bold text-indigo-700 bg-indigo-100/80 px-2.5 py-0.5 rounded-md">${h.dates}</span>
+              <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-map-pin mr-1"></i>${h.area}</span>
+            </div>
+            <h3 class="text-sm sm:text-base font-bold text-slate-800">${h.name}</h3>
+            <p class="text-xs text-slate-600">${h.note}</p>
+          </div>
+          
+          <div class="flex flex-wrap sm:flex-col gap-2 shrink-0">
+            <a href="${h.mapUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-rose-50 hover:text-rose-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors">
+              <i class="fa-solid fa-location-dot text-rose-500"></i> Google 地圖
+            </a>
+            <a href="${h.bookingUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-lg transition-colors">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> 訂房／官網
+            </a>
+            <button onclick="copyText('${h.name.replace(/'/g, "\\'")}', '已複製住宿名稱')" class="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors cursor-pointer">
+              <i class="fa-regular fa-copy"></i> 複製名稱
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 渲染與處理行前檢查清單 (儲存於 localStorage)
+    const STORAGE_KEY = 'jp_2026_2027_trip_checklist';
+
+    function renderChecklist() {
+      const savedState = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      const container = document.getElementById('checklist-container');
+
+      container.innerHTML = checklistItems.map((item, idx) => {
+        const isChecked = !!savedState[idx];
+        return `
+          <label class="flex items-start gap-3 p-3 rounded-xl border transition-all cursor-pointer select-none ${isChecked ? 'bg-emerald-50/70 border-emerald-200 text-slate-400 line-through' : 'bg-slate-50 border-slate-200/80 text-slate-700 hover:bg-slate-100'}">
+            <input type="checkbox" onchange="toggleChecklistItem(${idx})" ${isChecked ? 'checked' : ''} 
+                   class="mt-0.5 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500 cursor-pointer shrink-0">
+            <span class="text-xs sm:text-sm font-medium leading-snug">${item}</span>
+          </label>
+        `;
+      }).join('');
+    }
+
+    function toggleChecklistItem(index) {
+      const savedState = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      savedState[index] = !savedState[index];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
+      renderChecklist();
+    }
+
+    function resetChecklist() {
+      localStorage.removeItem(STORAGE_KEY);
+      renderChecklist();
+      showToast('已重設所有檢查項目');
+    }
+
+    // 複製文字到剪貼簿 (相容 iFrame 與手機瀏覽器)
+    function copyText(text, customMsg) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast(`${customMsg || '已複製'}：${text}`);
+      } catch (err) {
+        showToast('複製失敗，請手動選取複製');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      toastMsg.textContent = message;
+      toast.classList.remove('opacity-0');
+      setTimeout(() => {
+        toast.classList.add('opacity-0');
+      }, 2500);
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>

@@ -102,13 +102,16 @@
   <!-- 主要內容區 -->
   <main class="max-w-3xl mx-auto px-4 sm:px-5 -mt-5 relative z-20">
     
-    <!-- 雙分頁切換 Tabs -->
-    <div class="bg-white p-1.5 rounded-2xl shadow-md border border-slate-200/80 flex gap-1.5 mb-6">
-      <button onclick="switchTab('itinerary')" id="tab-itinerary" class="flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all bg-brand-600 text-white shadow-sm cursor-pointer">
-        📅 每日行程總覽
+    <!-- 三分頁切換 Tabs -->
+    <div class="bg-white p-1.5 rounded-2xl shadow-md border border-slate-200/80 grid grid-cols-3 gap-1.5 mb-6">
+      <button onclick="switchTab('itinerary')" id="tab-itinerary" class="py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all bg-brand-600 text-white shadow-sm cursor-pointer truncate">
+        📅 每日行程表
       </button>
-      <button onclick="switchTab('info')" id="tab-info" class="flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:bg-slate-100 cursor-pointer">
-        🏨 住宿・交通・清單總整理
+      <button onclick="switchTab('info')" id="tab-info" class="py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:bg-slate-100 cursor-pointer truncate">
+        🏨 住宿・交通・清單
+      </button>
+      <button onclick="switchTab('food')" id="tab-food" class="py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:bg-slate-100 cursor-pointer truncate">
+        🍜 餐廳口袋名單
       </button>
     </div>
 
@@ -177,7 +180,152 @@
 
     </section>
 
+    <!-- ===================================================================== -->
+    <!-- 分頁三：餐廳口袋名單（東京 5 間 ＋ 仙台 3 間）                        -->
+    <!-- ===================================================================== -->
+    <section id="view-food" class="hidden space-y-5">
+      <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+        <span><i class="fa-solid fa-utensils text-amber-500 mr-1"></i>點擊城市標題可展開／收合，每間店皆可一鍵展開「招牌菜單」</span>
+      </div>
+
+      <!-- 餐廳口袋名單手風琴由 JS 動態渲染 -->
+      <div id="food-container" class="space-y-4"></div>
+    </section>
+
   </main>
+
+  <!-- ===================================================================== -->
+  <!-- 🗺️ JR 東日本 PASS 使用區域地圖互動 Modal 彈窗                         -->
+  <!-- ===================================================================== -->
+  <div id="jr-map-modal" class="fixed inset-0 bg-slate-900/75 backdrop-blur-xs z-50 hidden flex items-center justify-center p-3 sm:p-5" onclick="closeJrMapModal(event)">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200" onclick="event.stopPropagation()">
+      <!-- Modal 標題列 -->
+      <div class="px-4 sm:px-5 py-3.5 bg-gradient-to-r from-emerald-700 to-teal-700 text-white flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-map-location-dot text-emerald-200"></i>
+          <h3 class="font-bold text-sm sm:text-base">JR 東日本鐵路周遊券（東北地區）使用範圍圖</h3>
+        </div>
+        <button onclick="closeJrMapModal()" class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white transition-colors cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Modal 內容區（可捲動） -->
+      <div class="p-4 sm:p-5 overflow-y-auto space-y-4">
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900 leading-relaxed">
+          <span class="font-bold"><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i>本次行程涵蓋區間：</span>
+          成田機場（N'EX）⇄ 東京／上野 ⇄ 大石田（轉巴士往銀山溫泉）⇄ 仙台 ⇄ 東京，全程皆在周遊券免費搭乘範圍內！
+        </div>
+
+        <!-- 內建高清 SVG JR 東日本（東北地區）路線示意圖 -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-2 sm:p-3 overflow-x-auto">
+          <svg viewBox="0 0 680 520" class="w-full h-auto min-w-[520px] select-none font-sans" xmlns="http://www.w3.org/2000/svg">
+            <!-- 背景海洋與陸地輪廓 -->
+            <rect width="680" height="520" rx="12" fill="#f0f9ff" />
+            <path d="M120,490 L140,420 L185,370 L215,310 L235,240 L250,150 L265,65 L355,45 L395,95 L415,180 L405,270 L385,345 L395,415 L375,465 L310,480 L255,470 L215,495 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+            
+            <!-- 圖例說明框 -->
+            <g transform="translate(24, 24)">
+              <rect width="215" height="106" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+              <text x="12" y="22" font-size="12" font-weight="bold" fill="#0f172a">JR PASS 東北地區路線圖例</text>
+              <line x1="12" y1="42" x2="42" y2="42" stroke="#059669" stroke-width="5" stroke-linecap="round" />
+              <text x="50" y="46" font-size="11" fill="#334155">東北／秋田新幹線（本次主力）</text>
+              <line x1="12" y1="64" x2="42" y2="64" stroke="#f97316" stroke-width="4" stroke-linecap="round" />
+              <text x="50" y="68" font-size="11" fill="#334155">山形新幹線（往大石田・銀山溫泉）</text>
+              <line x1="12" y1="86" x2="42" y2="86" stroke="#0284c7" stroke-width="3.5" stroke-dasharray="5,3" />
+              <text x="50" y="90" font-size="11" fill="#334155">成田特快 N'EX ＆ JR 在來線</text>
+            </g>
+
+            <!-- 東北新幹線主幹線 (東京 -> 大宮 -> 宇都宮 -> 郡山 -> 福島 -> 仙台 -> 盛岡 -> 新青森) -->
+            <polyline points="265,445 265,410 275,370 295,330 315,295 345,250 355,165 335,65" fill="none" stroke="#059669" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" />
+
+            <!-- 秋田新幹線 (盛岡 -> 秋田) -->
+            <polyline points="355,165 265,155" fill="none" stroke="#059669" stroke-width="4.5" stroke-linecap="round" />
+
+            <!-- 山形新幹線 (福島 -> 山形 -> 大石田 -> 新庄) -->
+            <polyline points="315,295 280,265 275,230 275,205" fill="none" stroke="#f97316" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+
+            <!-- 仙山線 (山形 <-> 仙台) -->
+            <polyline points="280,265 345,250" fill="none" stroke="#0284c7" stroke-width="3" stroke-dasharray="4,3" />
+
+            <!-- 成田特快 N'EX (東京 <-> 成田機場) -->
+            <polyline points="265,445 365,445" fill="none" stroke="#0284c7" stroke-width="4" />
+
+            <!-- 東京近郊 / 伊豆方向示意 (東京 -> 川崎 -> 橫濱 -> 伊東) -->
+            <polyline points="265,445 245,468 220,492" fill="none" stroke="#0284c7" stroke-width="3" stroke-dasharray="4,3" />
+
+            <!-- 車站節點與標籤 -->
+            <!-- 新青森 -->
+            <circle cx="335" cy="65" r="5" fill="#ffffff" stroke="#059669" stroke-width="3" />
+            <text x="346" y="69" font-size="12" font-weight="bold" fill="#1e293b">新青森</text>
+
+            <!-- 秋田 -->
+            <circle cx="265" cy="155" r="5" fill="#ffffff" stroke="#059669" stroke-width="3" />
+            <text x="230" y="159" font-size="12" font-weight="bold" fill="#1e293b">秋田</text>
+
+            <!-- 盛岡 -->
+            <circle cx="355" cy="165" r="5" fill="#ffffff" stroke="#059669" stroke-width="3" />
+            <text x="366" y="169" font-size="12" font-weight="bold" fill="#1e293b">盛岡</text>
+
+            <!-- 大石田 (銀山溫泉) - 重點標示 -->
+            <circle cx="275" cy="230" r="6.5" fill="#f97316" stroke="#ffffff" stroke-width="2" />
+            <rect x="135" y="216" width="130" height="24" rx="6" fill="#fff7ed" stroke="#f97316" stroke-width="1.5" />
+            <text x="200" y="232" text-anchor="middle" font-size="11" font-weight="bold" fill="#c2410c">★ 大石田 (銀山溫泉)</text>
+
+            <!-- 山形 -->
+            <circle cx="280" cy="265" r="5" fill="#ffffff" stroke="#f97316" stroke-width="3" />
+            <text x="245" y="269" font-size="11" font-weight="bold" fill="#334155">山形</text>
+
+            <!-- 仙台 - 重點標示 -->
+            <circle cx="345" cy="250" r="7" fill="#059669" stroke="#ffffff" stroke-width="2" />
+            <rect x="357" y="236" width="112" height="24" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1.5" />
+            <text x="413" y="252" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#047857">★ 仙台 (12/28-29)</text>
+
+            <!-- 福島 -->
+            <circle cx="315" cy="295" r="5" fill="#ffffff" stroke="#059669" stroke-width="3" />
+            <text x="326" y="299" font-size="11" font-weight="bold" fill="#334155">福島</text>
+
+            <!-- 郡山 -->
+            <circle cx="295" cy="330" r="4.5" fill="#ffffff" stroke="#059669" stroke-width="2.5" />
+            <text x="306" y="334" font-size="11" fill="#475569">郡山</text>
+
+            <!-- 宇都宮 -->
+            <circle cx="275" cy="370" r="4.5" fill="#ffffff" stroke="#059669" stroke-width="2.5" />
+            <text x="286" y="374" font-size="11" fill="#475569">宇都宮</text>
+
+            <!-- 大宮 -->
+            <circle cx="265" cy="410" r="4.5" fill="#ffffff" stroke="#059669" stroke-width="2.5" />
+            <text x="232" y="414" font-size="11" fill="#475569">大宮</text>
+
+            <!-- 東京 / 上野 - 重點標示 -->
+            <circle cx="265" cy="445" r="7" fill="#0284c7" stroke="#ffffff" stroke-width="2" />
+            <rect x="150" y="432" width="104" height="24" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.5" />
+            <text x="202" y="448" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#0369a1">★ 東京／上野</text>
+
+            <!-- 成田機場 - 重點標示 -->
+            <circle cx="365" cy="445" r="6.5" fill="#0284c7" stroke="#ffffff" stroke-width="2" />
+            <rect x="376" y="432" width="118" height="24" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.5" />
+            <text x="435" y="448" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#0369a1">✈ 成田機場 (NRT)</text>
+
+            <!-- 川崎 / 伊東方向 -->
+            <circle cx="245" cy="468" r="4" fill="#ffffff" stroke="#0284c7" stroke-width="2.5" />
+            <text x="255" y="472" font-size="10.5" fill="#475569">川崎・橫濱・熱海・伊東</text>
+          </svg>
+        </div>
+
+        <!-- 底部操作按鈕 -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+          <a href="https://www.jreast.co.jp/multi/zh-CHT/pass/eastpass_t.html" target="_blank" rel="noopener noreferrer" 
+             class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3.5 py-2 rounded-xl transition-colors">
+            <i class="fa-solid fa-up-right-from-square"></i> 開啟 JR 東日本官方詳細路線圖
+          </a>
+          <button onclick="closeJrMapModal()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-xl cursor-pointer">
+            關閉視窗
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- 複製成功提示 Toast -->
   <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-medium px-4 py-2.5 rounded-full shadow-xl opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-2">
@@ -189,6 +337,9 @@
   <!-- 🛠️ 【旅遊手冊資料設定區】日後只需修改這裡的資料，就能輕鬆更新網頁內容！   -->
   <!-- ======================================================================= -->
   <script>
+    // JR 東日本 PASS 官方訂票與資訊連結
+    const JR_PASS_OFFICIAL_URL = "https://www.eki-net.com/zh-CHT/jreast-train-reservation/Top/Index#_gl=1*1l2y7ma*_ga*MTY0MTY4MzQyLjE3OTQxNTQ0MjY.*_ga_ZDNCJLPMZL*czE3OTQ4MzIzNjAkbzIkZzAkdDE3OTQ4MzIzNjAkajYwJGwwJGgw";
+
     // 1. 旅程基本設定
     const tripConfig = {
       title: "2026–2027 日本跨年之旅｜東北銀山溫泉・C109・河口湖與伊豆自駕",
@@ -202,21 +353,28 @@
       {
         day: "Day 1",
         date: "2026/12/26 (六)",
-        title: "抵達東京・淺草入住",
+        title: "桃園機場集合出發・抵達東京淺草",
         defaultOpen: true, // 預設展開第一天
         items: [
           {
             time: "13:00",
             category: "航班",
-            name: "桃園國際機場 第二航廈（出發）",
-            note: "建議提前 2.5～3 小時（約 10:00–10:30）抵達桃園機場第二航廈辦理登機與行李託運。",
+            name: "桃園國際機場 第二航廈集合",
+            note: "13:00 準時於桃園機場第二航廈集合，辦理登機報到、行李託運與免稅店逛街。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=桃園國際機場第二航廈"
+          },
+          {
+            time: "16:25",
+            category: "航班",
+            name: "班機起飛前往東京成田機場（NRT）",
+            note: "16:25 準時起飛，開啟 11 天日本冬日跨年之旅！",
             mapUrl: "https://www.google.com/maps/search/?api=1&query=桃園國際機場第二航廈"
           },
           {
             time: "20:30",
             category: "航班",
             name: "抵達東京成田國際機場（NRT）",
-            note: "辦理入境手續、領取行李，並至 JR 東日本旅行服務中心兌換／領取「JR PASS 東日本周遊券」，隨後搭乘 Skyliner 或 Access 特急前往淺草。",
+            note: "辦理入境手續、領取行李，並至 JR 東日本旅行服務中心領取／兌換「JR PASS 東日本周遊券」，隨後搭乘京成電鐵（Skyliner 或 Access 特急）前往淺草。",
             mapUrl: "https://www.google.com/maps/search/?api=1&query=成田國際機場"
           },
           {
@@ -233,15 +391,18 @@
       {
         day: "Day 2",
         date: "2026/12/27 (日)",
-        title: "啟用 JR PASS 東日本・前往銀山溫泉",
+        title: "啟用 JR 東日本 PASS・前往銀山溫泉",
         defaultOpen: false,
         items: [
           {
             time: "上午",
             category: "交通",
-            name: "啟用 JR PASS 東日本周遊券・搭乘新幹線北上",
-            note: "從上野／東京站搭乘山形新幹線（つばさ Tsubasa 號）前往山形／大石田站，再轉乘接駁巴士前往銀山溫泉。",
-            mapUrl: "https://www.google.com/maps/search/?api=1&query=大石田駅"
+            name: "啟用 JR 東日本鐵路周遊券（東北地區）・搭乘新幹線北上",
+            note: "從上野／東京站搭乘山形新幹線（つばさ Tsubasa 號）前往大石田站，再轉乘接駁巴士前往銀山溫泉。可提前於えきねっと官網劃位指定席！",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=大石田駅",
+            linkUrl: JR_PASS_OFFICIAL_URL,
+            linkText: "JR 東日本 PASS 官網／劃位",
+            showJrMapBtn: true // 顯示開啟使用區域地圖按鈕
           },
           {
             time: "下午",
@@ -271,7 +432,7 @@
             time: "下午",
             category: "住宿",
             name: "入住仙台住宿：KOKO HOTEL Sendai Kotodai Park",
-            note: "位於仙台市中心勾當台公園附近，鄰近一番町商店街與國分町美食區，連住兩晚（12/28–12/29）。",
+            note: "位於仙台市中心勾當台公園附近，鄰近一番町商店街與國分町美食區（善治郎、閣、司皆在步行圈內），連住兩晚（12/28–12/29）。",
             mapUrl: "https://www.google.com/maps/search/?api=1&query=KOKO+HOTEL+Sendai+Kotodai+Park",
             linkUrl: "https://www.polaris-hotels.com/",
             linkText: "飯店集團官網"
@@ -288,7 +449,7 @@
             time: "全日",
             category: "活動",
             name: "仙台市區／周邊自由活動",
-            note: "可善用 JR PASS 安排日本三景「松島」、藏王狐狸村，或是在仙台市區大啖厚切牛舌、毛豆奶昔（待後續補充細節）。",
+            note: "可善用 JR PASS 安排日本三景「松島」、藏王狐狸村，或是在仙台市區大啖厚切牛舌（可切換至『🍜 餐廳口袋名單』分頁查看仙台牛舌三巨頭！）。",
             mapUrl: "https://www.google.com/maps/search/?api=1&query=仙台市"
           },
           {
@@ -445,17 +606,17 @@
       {
         day: "Day 11",
         date: "2027/01/05 (二)",
-        title: "銀座かつかみ 頂級炸豬排午宴・返程",
+        title: "銀座かつかみ 二號店午宴・19:30 搭機返台",
         defaultOpen: false,
         items: [
           {
             time: "午餐",
             category: "美食",
-            name: "銀座かつかみ（Ginza Katsukami）頂級炸豬排套餐",
-            note: "米其林推薦的板前炸豬排專門店，預約享用【ランチ】かつかみフルコース（午間全套套餐）。",
-            mapUrl: "https://www.google.com/maps/search/?api=1&query=銀座かつかみ",
+            name: "銀座かつかみ 二號店（銀座かつかみ 弐 / Ginza Katsukami 2）",
+            note: "米其林推薦板前炸豬排專門店二號店，預約享用【ランチ】かつかみフルコース（午間全套套餐）。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=銀座かつかみ+弐",
             linkUrl: "https://katsukami.com/ginza-katsukami_jp_02.html",
-            linkText: "銀座かつかみ官網",
+            linkText: "銀座かつかみ 二號店官網",
             // 專屬精緻菜單明細卡片
             menuTitle: "🍽️【ランチ】かつかみフルコース 完整菜單",
             menuItems: [
@@ -474,11 +635,18 @@
             ]
           },
           {
-            time: "下午／晚間",
-            category: "航班",
-            name: "前往機場辦理登機返程",
-            note: "滿載戰利品與美好回憶返回台灣（待後續補充回程班機時間與航廈）。",
+            time: "16:30",
+            category: "交通",
+            name: "前往東京成田機場（NRT）",
+            note: "餐後領取行李，從東京／銀座搭乘成田特快 N'EX 或利木津巴士前往成田機場辦理登機與免稅品最後採買。",
             mapUrl: "https://www.google.com/maps/search/?api=1&query=成田國際機場"
+          },
+          {
+            time: "19:30",
+            category: "航班",
+            name: "航班起飛返台（東京成田 NRT ➔ 桃園 TPE）",
+            note: "19:30 準時起飛返抵台灣，結束充實愉快的 11 天日本跨年之旅！",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=桃園國際機場"
           }
         ]
       }
@@ -487,20 +655,23 @@
     // 3. 交通票券、航班與自駕總整理資料
     const transportData = [
       {
-        badge: "去程航班",
+        badge: "去程＆回程航班",
         badgeColor: "bg-sky-100 text-sky-700",
-        title: "2026/12/26 (六) 桃園 (TPE) T2 ➔ 東京成田 (NRT)",
-        details: "13:00 桃園機場第二航廈出發 ➔ 20:30 抵達東京成田機場（建議 10:30 前抵達機場）。",
+        title: "12/26 (六) 去程 16:25 起飛 ｜ 01/05 (二) 回程 19:30 起飛",
+        details: "去程：13:00 桃園機場第二航廈集合 ➔ 16:25 起飛 ➔ 20:30 抵達成田機場。\n回程：01/05 19:30 成田機場起飛返回台灣。",
         copyText: "",
         mapUrl: "https://www.google.com/maps/search/?api=1&query=桃園國際機場第二航廈"
       },
       {
         badge: "鐵路周遊券",
         badgeColor: "bg-emerald-100 text-emerald-700",
-        title: "JR PASS 東日本鐵路周遊券（12/27 啟用）",
+        title: "JR 東日本鐵路周遊券（東北地區｜12/27 啟用）",
         details: "12/26 晚間於成田機場領取兌換，12/27 正式啟用搭乘新幹線前往大石田（銀山溫泉）、仙台及返回東京。",
         copyText: "",
-        mapUrl: ""
+        mapUrl: "",
+        linkUrl: JR_PASS_OFFICIAL_URL,
+        linkText: "JR 東日本 PASS 官網／劃位",
+        showJrMapBtn: true
       },
       {
         badge: "自駕租車",
@@ -509,7 +680,8 @@
         details: "地址：2 Chome-15-15 Kamishinjo, Nakahara Ward, Kawasaki, Kanagawa 211-0045日本（取車必備：台灣駕照正本＋日文譯本＋護照）。",
         copyText: "2 Chome-15-15 Kamishinjo, Nakahara Ward, Kawasaki, Kanagawa 211-0045日本",
         mapUrl: "https://www.google.com/maps/search/?api=1&query=2+Chome-15-15+Kamishinjo,+Nakahara+Ward,+Kawasaki,+Kanagawa+211-0045",
-        linkUrl: "https://tc.tabirai.net/car/kanagawa/company/nissan/branch/?PID=1948"
+        linkUrl: "https://tc.tabirai.net/car/kanagawa/company/nissan/branch/?PID=1948",
+        linkText: "店鋪網頁"
       }
     ];
 
@@ -585,6 +757,156 @@
       "日幣現金與海外高回饋信用卡"
     ];
 
+    // 6. 餐廳口袋名單資料（東京 5 間 ＋ 仙台 3 間）
+    const restaurantCategories = [
+      {
+        cityId: "tokyo",
+        cityTitle: "🗼 東京美食口袋名單",
+        citySubtitle: "上野・澀谷・六本木・銀座（共 5 間精選）",
+        badgeBg: "bg-rose-600",
+        defaultOpen: true,
+        spots: [
+          {
+            name: "鴨 to 蔥（らーめん 鴨to葱 上野御徒町本店）",
+            area: "上野・御徒町",
+            tag: "排隊名店・鴨湯拉麵",
+            highlight: "只用鴨肉、大蔥與水熬煮的清甜醇厚湯頭，可自選兩種當月限定烤蔥配料！",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=らーめん+鴨to葱+上野御徒町本店",
+            officialUrl: "https://www.kamotonegi.com/",
+            officialLabel: "店家官網",
+            menuNote: "店外食券機點餐（建議避開正餐尖峰時段排隊）",
+            menuItems: [
+              { name: "鴨らーめん（招牌鴨汁拉麵）", price: "約 ¥980", desc: "軟嫩低溫烹調鴨肉片＋自選 2 種特色大蔥" },
+              { name: "鴨コンフィ麺（油封鴨腿拉麵）", price: "約 ¥1,260", desc: "整隻慢火油封鴨腿＋特製鴨肉雲吞，肉量滿足" },
+              { name: "飲める親子丼（滑蛋鴨肉親子丼）", price: "約 ¥420", desc: "入口即化的半熟濃郁蛋液搭配炭香鴨肉丁，必點副食" },
+              { name: "每月限定蔥三選二（免費自選）", price: "免費", desc: "如丸太白蔥、國產九條蔥、細蔥等每月輪替" }
+            ]
+          },
+          {
+            name: "燒肉一心たん助 上野店",
+            area: "上野",
+            tag: "厚切牛舌吃到飽",
+            highlight: "東京超人氣仙台厚切牛舌燒肉吃到飽，20mm 極厚牛舌與蔥鹽牛舌無限續點！",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=焼肉一心たん助+上野店",
+            officialUrl: "https://www.tansuke-ueno.com/",
+            officialLabel: "官網／線上訂位",
+            menuNote: "強烈建議提前於官網預約時段（限時 100 分鐘吃到飽）",
+            menuItems: [
+              { name: "プレミアムコース（頂級厚切牛舌吃到飽方案）", price: "約 ¥6,578", desc: "含 20mm 極厚牛舌、仙台牛舌、上等牛肋條等全品項" },
+              { name: "厚切り極上牛タン（極上厚切牛舌）", price: "吃到飽內含", desc: "口感脆彈多汁，店員常會協助代烤至最佳熟度" },
+              { name: "ネギ塩牛タン（招牌蔥鹽牛舌）", price: "吃到飽內含", desc: "滿滿特製麻油香蔥包裹在薄切牛舌中，下飯神器" },
+              { name: "無限續加白飯＆特製牛尾湯", price: "吃到飽內含", desc: "搭配燒肉必備的白飯與濃郁牛尾湯" }
+            ]
+          },
+          {
+            name: "串燒肉人 MEAT MAN 澀谷（焼鳥 肉人 MEAT MAN 渋谷）",
+            area: "澀谷・道玄坂",
+            tag: "人氣炭火居酒屋",
+            highlight: "澀谷氣氛超嗨的炭火串燒居酒屋，現烤串燒配招牌明太子起司玉子燒超絕配！",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=焼鳥+肉人+MEAT+MAN+渋谷",
+            officialUrl: "https://tabelog.com/tokyo/A1303/A130301/13183948/",
+            officialLabel: "Tabelog 店家資訊",
+            menuNote: "晚上生意極佳，建議預約或早點到店",
+            menuItems: [
+              { name: "明太チーズだし巻き玉子（明太子起司玉子燒）", price: "約 ¥880", desc: "幾乎每桌必點！切開會爆漿的濃郁起司與炙燒明太子" },
+              { name: "名物！白レバー串（招牌白雞肝串）", price: "約 ¥250", desc: "入口如鵝肝般綿密滑順，毫無腥味" },
+              { name: "自家製つくね（手工雞肉丸子串）", price: "約 ¥320", desc: "炭火直烤香氣十足，沾生蛋黃與甜醬油超濃郁" },
+              { name: "特製レモンサワー（招牌檸檬沙瓦）", price: "約 ¥550", desc: "清爽解膩的居酒屋靈魂飲品" }
+            ]
+          },
+          {
+            name: "入鹿TOKYO 六本木（IRUCA Tokyo 六本木）",
+            area: "六本木",
+            tag: "米其林必比登推介",
+            highlight: "連續獲選米其林必比登！牛肝菌醬油湯頭融合雞、豚、蝦、貝四重奏，香氣驚艷。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=入鹿TOKYO+六本木",
+            officialUrl: "https://www.instagram.com/iruca.tokyo/",
+            officialLabel: "官方 Instagram",
+            menuNote: "現場排隊制（店員會引導使用食券機）",
+            menuItems: [
+              { name: "ポルチーニ醤油らぁ麺（牛肝菌醬油拉麵）", price: "約 ¥1,300", desc: "招牌必點！黑松露牛肝菌醬融入四重高湯，層次感爆棚" },
+              { name: "特製ポルチーニ醤油らぁ麺（特製豪華版）", price: "約 ¥1,800", desc: "加量鴨叉燒、豚叉燒、雞肉丸、蝦雲吞與溏心蛋" },
+              { name: "柚子塩らぁ麺（柚子鹽拉麵）", price: "約 ¥1,300", desc: "清雅柚子果香搭配海鮮雞高湯，爽口不膩" },
+              { name: "黒トリュフ卵かけご飯（黑松露生蛋拌飯）", price: "約 ¥550", desc: "濃厚生蛋黃與現刨松露醬拌飯，香氣迷人" }
+            ]
+          },
+          {
+            name: "燒肉 INOUE 銀座（焼肉いのうえ 銀座店）",
+            area: "銀座",
+            tag: "A5黑毛和牛・精緻燒肉",
+            highlight: "銀座高質感包廂／半包廂燒肉，主打 A5 黑毛和牛與主廚創意生拌和牛料理。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=焼肉いのうえ+銀座店",
+            officialUrl: "https://yakiniku-inoue.com/",
+            officialLabel: "店家官網",
+            menuNote: "提供午間超值燒肉套餐與晚間黑毛和牛宴席",
+            menuItems: [
+              { name: "INOUE ロース（招牌黑毛和牛肋眼薄燒）", price: "約 ¥2,400", desc: "油花細緻均勻，輕烤數秒即可享受入口即化油脂甜味" },
+              { name: "特上厚切りタン塩（特上厚切鹽味牛舌）", price: "約 ¥2,980", desc: "嚴選牛舌舌根部位，爽脆多汁" },
+              { name: "いのうえユッケ（招牌生拌和牛塔塔）", price: "約 ¥1,980", desc: "銀座店人氣名物，搭配蛋黃與特製醬汁極致鮮甜" },
+              { name: "黒毛和牛の焼きすき（月見壽喜燒和牛）", price: "約 ¥2,600", desc: "刷上秘製壽喜燒醬汁炙烤後沾濃郁蛋液享用" }
+            ]
+          }
+        ]
+      },
+      {
+        cityId: "sendai",
+        cityTitle: "🐮 仙台牛舌・美食口袋名單",
+        citySubtitle: "仙台站前・一番町（仙台牛舌御三家名店，共 3 間）",
+        badgeBg: "bg-amber-600",
+        defaultOpen: true,
+        spots: [
+          {
+            name: "烤牛舌 善治郎（たんや善治郎 仙台站前本店）",
+            area: "仙台站前",
+            tag: "仙台牛舌御三家・必吃真中牛舌",
+            highlight: "仙台排隊人氣王！堅持職人手工鹽漬熟成與備長炭直烤，最推限量「真中たん」極厚舌芯。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=たんや善治郎+仙台駅前本店",
+            officialUrl: "https://www.tanya-zenjirou.jp/",
+            officialLabel: "店家官網",
+            menuNote: "仙台站前本店與站內牛舌通皆有分店，建議抽號碼牌候位",
+            menuItems: [
+              { name: "真中たん定食（極厚牛舌中心部位定食 3枚9切）", price: "約 ¥3,300", desc: "整條牛舌最軟嫩稀有的中心部位，厚切脆彈必點！" },
+              { name: "牛たん極太定食（極太厚切牛舌定食）", price: "約 ¥2,970", desc: "豪邁厚切口感十足，炭火香氣四溢" },
+              { name: "上撰極厚真中たん定食（附牛舌香腸）", price: "約 ¥3,630", desc: "一次享受真中牛舌與爆汁牛舌香腸" },
+              { name: "定食標配：麥飯（可免費續碗一次）＋山藥泥或沙拉＋牛尾湯", price: "定食內含", desc: "點餐時可自由選擇搭配山藥泥（とろろ）或沙拉" }
+            ]
+          },
+          {
+            name: "牛たん料理 閣（品牌本店 / VLANDOME 一番町店）",
+            area: "一番町（近 KOKO HOTEL）",
+            tag: "百名店・獨家刺身級炙燒生牛舌",
+            highlight: "離住宿 KOKO HOTEL 超近！獨家切割法讓牛舌外脆內嫩，更以「炙燒生牛舌薄片」聞名全日本。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=牛たん料理+閣+ブランドーム本店",
+            officialUrl: "https://gyutankaku.in/",
+            officialLabel: "店家官網",
+            menuNote: "晚餐時段可提前官網預約，中午建議開門前 15 分鐘抵達",
+            menuItems: [
+              { name: "たん焼き定食（招牌炭烤牛舌定食 5枚/6枚）", price: "約 ¥2,640～", desc: "獨家刀工處理，咬下瞬間肉汁迸發，完全不韌口" },
+              { name: "牛たんタタキ（招牌炙燒生牛舌薄片）", price: "約 ¥2,970", desc: "閣的鎮店名物！半生熟粉嫩牛舌搭配大量洋蔥絲與特製醋醬" },
+              { name: "トマト牛たん煮込み（番茄紅酒燉牛舌）", price: "約 ¥1,430", desc: "燉煮至用筷子就能輕鬆夾斷的軟嫩口感" },
+              { name: "定食標配：麥飯＋清甜蔥花牛尾湯", price: "定食內含", desc: "清澈卻極度鮮甜的慢熬牛尾清湯" }
+            ]
+          },
+          {
+            name: "烤牛舌專門店 司（牛タン焼専門店 司 西口名掛丁店）",
+            area: "仙台站西口・名掛丁",
+            tag: "熟成焦香派・老饕私藏名店",
+            highlight: "嚴選澳洲最高等級穀飼牛舌熟成，炭火烤出獨特焦香與多汁肉感，搭配山葵（芥末）一起吃超驚艷！",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=牛タン焼専門店+司+西口名掛丁店",
+            officialUrl: "https://www.gyutan-tsukasa.co.jp/",
+            officialLabel: "店家官網",
+            menuNote: "距離仙台站西口步行約 3 分鐘，位置超方便",
+            menuItems: [
+              { name: "牛タン定食（招牌熟成炭烤牛舌定食 4枚8切）", price: "約 ¥2,530", desc: "司的經典招牌，強烈推薦沾一點盤邊的現磨山葵享用" },
+              { name: "牛タン焼＋ハラミ定食（牛舌＋橫膈膜雙拼定食）", price: "約 ¥2,640", desc: "一次吃到脆彈牛舌與軟嫩多汁牛橫膈膜" },
+              { name: "こがし麦飯＋とろろ（焦香麥飯＋山藥泥）", price: "約 ¥330（加點）", desc: "微帶香氣的麥飯淋上滑順山藥泥，輕鬆扒完整碗" },
+              { name: "牛タンソーセージ（炭烤牛舌香腸）", price: "約 ¥770", desc: "外皮微焦脆、內餡飽滿多汁的下酒好菜" }
+            ]
+          }
+        ]
+      }
+    ];
+
 
     // =========================================================================
     // ⚙️ 【系統渲染與互動邏輯區】以下程式碼負責生成畫面與互動功能，無需修改
@@ -607,6 +929,7 @@
       renderTransport();
       renderAccommodations();
       renderChecklist();
+      renderFoodList();
       updateToggleAllButtonState();
     }
 
@@ -669,7 +992,7 @@
 
                 ${menuHTML}
 
-                <!-- 操作按鈕列 (Google 地圖 & 相關連結) -->
+                <!-- 操作按鈕列 (Google 地圖 & 相關連結 & JR PASS 區域地圖) -->
                 <div class="flex flex-wrap items-center gap-2 pt-1">
                   ${item.mapUrl ? `
                     <a href="${item.mapUrl}" target="_blank" rel="noopener noreferrer" 
@@ -685,6 +1008,14 @@
                       <i class="fa-solid fa-link"></i>
                       ${item.linkText || '相關連結'}
                     </a>
+                  ` : ''}
+
+                  ${item.showJrMapBtn ? `
+                    <button onclick="openJrMapModal()" 
+                            class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-lg shadow-2xs transition-all active:scale-95 cursor-pointer">
+                      <i class="fa-solid fa-map-location-dot"></i>
+                      查看 JR PASS 使用區域地圖
+                    </button>
                   ` : ''}
                 </div>
               </div>
@@ -747,54 +1078,70 @@
 
     // 全部展開 / 全部收合
     function toggleAllDays() {
-      const contents = document.querySelectorAll('.accordion-content');
+      const contents = document.querySelectorAll('#itinerary-container .accordion-content');
       const anyClosed = Array.from(contents).some(el => !el.classList.contains('open'));
 
       contents.forEach((content, idx) => {
         const arrow = document.getElementById(`arrow-${idx}`);
         if (anyClosed) {
           content.classList.add('open');
-          arrow.classList.add('rotate-180');
+          if (arrow) arrow.classList.add('rotate-180');
         } else {
           content.classList.remove('open');
-          arrow.classList.remove('rotate-180');
+          if (arrow) arrow.classList.remove('rotate-180');
         }
       });
       updateToggleAllButtonState();
     }
 
+    // 更新頂部「全部展開 / 全部收合」按鈕文字與圖示狀態
     function updateToggleAllButtonState() {
-      const contents = document.querySelectorAll('.accordion-content');
-      const allOpen = Array.from(contents).every(el => el.classList.contains('open'));
+      const contents = document.querySelectorAll('#itinerary-container .accordion-content');
       const btnText = document.getElementById('toggle-all-text');
       const btnIcon = document.getElementById('toggle-all-icon');
-      
-      btnText.textContent = allOpen ? '全部收合' : '全部展開';
+      if (!btnText || !btnIcon) return;
+
+      const allOpen = contents.length > 0 && Array.from(contents).every(el => el.classList.contains('open'));
       if (allOpen) {
+        btnText.textContent = '全部收合';
         btnIcon.classList.add('rotate-180');
       } else {
+        btnText.textContent = '全部展開';
         btnIcon.classList.remove('rotate-180');
       }
     }
 
-    // 雙分頁切換
+    // 三分頁切換 (每日行程 / 住宿交通 / 餐廳口袋名單)
     function switchTab(tabName) {
-      const viewItinerary = document.getElementById('view-itinerary');
-      const viewInfo = document.getElementById('view-info');
-      const tabItinerary = document.getElementById('tab-itinerary');
-      const tabInfo = document.getElementById('tab-info');
+      const tabs = ['itinerary', 'info', 'food'];
+      const activeClass = "py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all bg-brand-600 text-white shadow-sm cursor-pointer truncate";
+      const inactiveClass = "py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:bg-slate-100 cursor-pointer truncate";
 
-      if (tabName === 'itinerary') {
-        viewItinerary.classList.remove('hidden');
-        viewInfo.classList.add('hidden');
-        tabItinerary.className = "flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all bg-brand-600 text-white shadow-sm cursor-pointer";
-        tabInfo.className = "flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:bg-slate-100 cursor-pointer";
-      } else {
-        viewItinerary.classList.add('hidden');
-        viewInfo.classList.remove('hidden');
-        tabInfo.className = "flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all bg-brand-600 text-white shadow-sm cursor-pointer";
-        tabItinerary.className = "flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:bg-slate-100 cursor-pointer";
-      }
+      tabs.forEach(t => {
+        const viewEl = document.getElementById(`view-${t}`);
+        const tabEl = document.getElementById(`tab-${t}`);
+        if (t === tabName) {
+          viewEl.classList.remove('hidden');
+          tabEl.className = activeClass;
+        } else {
+          viewEl.classList.add('hidden');
+          tabEl.className = inactiveClass;
+        }
+      });
+    }
+
+    // 開啟與關閉 JR PASS 使用區域地圖 Modal
+    function openJrMapModal() {
+      const modal = document.getElementById('jr-map-modal');
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeJrMapModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      const modal = document.getElementById('jr-map-modal');
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
     }
 
     // 渲染分頁二：交通與自駕資訊
@@ -806,7 +1153,7 @@
             <span class="text-xs font-bold px-2.5 py-0.5 rounded-md ${t.badgeColor}">${t.badge}</span>
           </div>
           <h3 class="text-sm sm:text-base font-bold text-slate-800 mb-1">${t.title}</h3>
-          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">${t.details}</p>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3 whitespace-pre-line">${t.details}</p>
           <div class="flex flex-wrap gap-2">
             ${t.mapUrl ? `
               <a href="${t.mapUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-rose-50 hover:text-rose-600 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors">
@@ -820,8 +1167,13 @@
             ` : ''}
             ${t.linkUrl ? `
               <a href="${t.linkUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 px-3 py-1.5 rounded-lg transition-colors">
-                <i class="fa-solid fa-link"></i> 店鋪網頁
+                <i class="fa-solid fa-link"></i> ${t.linkText || '相關網頁'}
               </a>
+            ` : ''}
+            ${t.showJrMapBtn ? `
+              <button onclick="openJrMapModal()" class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-lg transition-colors cursor-pointer">
+                <i class="fa-solid fa-map-location-dot"></i> 查看 JR PASS 使用區域地圖
+              </button>
             ` : ''}
           </div>
         </div>
@@ -887,6 +1239,147 @@
       localStorage.removeItem(STORAGE_KEY);
       renderChecklist();
       showToast('已重設所有檢查項目');
+    }
+
+    // 渲染分頁三：餐廳口袋名單（東京 ＋ 仙台可展開手風琴＆招牌菜單）
+    function renderFoodList() {
+      const container = document.getElementById('food-container');
+
+      container.innerHTML = restaurantCategories.map((cat, catIdx) => {
+        const isCatOpen = cat.defaultOpen;
+
+        const spotsHTML = cat.spots.map((spot, spotIdx) => {
+          const menuBoxId = `food-menu-${catIdx}-${spotIdx}`;
+          const menuBtnTextId = `food-menu-text-${catIdx}-${spotIdx}`;
+          const menuBtnIconId = `food-menu-icon-${catIdx}-${spotIdx}`;
+
+          return `
+            <div class="bg-slate-50/90 rounded-xl p-4 border border-slate-200/80 space-y-2.5">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-bold text-slate-700 bg-white border border-slate-200 px-2.5 py-0.5 rounded-md">
+                  <i class="fa-solid fa-map-pin text-rose-500 mr-1"></i>${spot.area}
+                </span>
+                <span class="text-xs font-semibold text-amber-800 bg-amber-100/80 px-2.5 py-0.5 rounded-md">
+                  ${spot.tag}
+                </span>
+              </div>
+
+              <h4 class="text-base font-bold text-slate-800 leading-snug">
+                ${spot.name}
+              </h4>
+
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                ${spot.highlight}
+              </p>
+
+              <!-- 操作按鈕列：Google 地圖 / 店家官網 / 查看招牌菜單 -->
+              <div class="flex flex-wrap items-center gap-2 pt-1">
+                <a href="${spot.mapUrl}" target="_blank" rel="noopener noreferrer" 
+                   class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 border border-slate-200 px-3 py-1.5 rounded-lg shadow-2xs transition-all active:scale-95">
+                  <i class="fa-solid fa-location-dot text-rose-500"></i>
+                  Google 地圖
+                </a>
+
+                ${spot.officialUrl ? `
+                  <a href="${spot.officialUrl}" target="_blank" rel="noopener noreferrer" 
+                     class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 px-3 py-1.5 rounded-lg shadow-2xs transition-all active:scale-95">
+                    <i class="fa-solid fa-globe"></i>
+                    ${spot.officialLabel || '店家官網'}
+                  </a>
+                ` : ''}
+
+                <button onclick="toggleSpotMenu('${menuBoxId}', '${menuBtnTextId}', '${menuBtnIconId}')" 
+                        class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-900 bg-amber-100 hover:bg-amber-200 border border-amber-300 px-3 py-1.5 rounded-lg shadow-2xs transition-all active:scale-95 cursor-pointer">
+                  <i id="${menuBtnIconId}" class="fa-solid fa-book-open"></i>
+                  <span id="${menuBtnTextId}">查看招牌菜單</span>
+                </button>
+              </div>
+
+              <!-- 可展開的招牌菜單明細區塊 -->
+              <div id="${menuBoxId}" class="hidden pt-2">
+                <div class="bg-white border border-amber-200/90 rounded-xl p-3.5 shadow-2xs">
+                  <div class="flex flex-wrap items-center justify-between gap-1 pb-2 mb-2.5 border-b border-amber-100">
+                    <span class="text-xs font-bold text-amber-900"><i class="fa-solid fa-utensils mr-1.5 text-amber-600"></i>必點招牌菜單＆參考價格</span>
+                    ${spot.menuNote ? `<span class="text-[11px] text-slate-500">${spot.menuNote}</span>` : ''}
+                  </div>
+                  <ul class="space-y-2">
+                    ${spot.menuItems.map(m => `
+                      <li class="text-xs flex flex-col sm:flex-row sm:items-baseline justify-between gap-0.5 sm:gap-3 pb-1.5 border-b border-slate-100 last:border-none last:pb-0">
+                        <div>
+                          <span class="font-bold text-slate-800">${m.name}</span>
+                          <p class="text-[11px] text-slate-500 mt-0.5">${m.desc}</p>
+                        </div>
+                        <span class="shrink-0 font-mono font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md self-start sm:self-center">
+                          ${m.price}
+                        </span>
+                      </li>
+                    `).join('')}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <article class="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden">
+            <button onclick="toggleFoodCity(${catIdx})" aria-expanded="${isCatOpen}"
+                    class="w-full text-left px-4 sm:px-5 py-4 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors cursor-pointer select-none">
+              <div class="flex items-center gap-3">
+                <span class="w-2.5 h-9 rounded-full ${cat.badgeBg} shrink-0"></span>
+                <div>
+                  <h3 class="text-base sm:text-lg font-bold text-slate-800">${cat.cityTitle}</h3>
+                  <p class="text-xs text-slate-500 mt-0.5">${cat.citySubtitle}</p>
+                </div>
+              </div>
+              <div class="shrink-0 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
+                <i id="food-city-arrow-${catIdx}" class="fa-solid fa-chevron-down text-xs transition-transform duration-300 ${isCatOpen ? 'rotate-180' : ''}"></i>
+              </div>
+            </button>
+
+            <div id="food-city-content-${catIdx}" class="accordion-content ${isCatOpen ? 'open' : ''}">
+              <div class="accordion-inner">
+                <div class="px-4 sm:px-5 pb-5 pt-3 border-t border-slate-100 space-y-3.5">
+                  ${spotsHTML}
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // 切換餐廳城市手風琴開合
+    function toggleFoodCity(catIdx) {
+      const content = document.getElementById(`food-city-content-${catIdx}`);
+      const arrow = document.getElementById(`food-city-arrow-${catIdx}`);
+      const isOpen = content.classList.contains('open');
+
+      if (isOpen) {
+        content.classList.remove('open');
+        arrow.classList.remove('rotate-180');
+      } else {
+        content.classList.add('open');
+        arrow.classList.add('rotate-180');
+      }
+    }
+
+    // 切換單間餐廳招牌菜單展開/收合
+    function toggleSpotMenu(boxId, textId, iconId) {
+      const box = document.getElementById(boxId);
+      const textEl = document.getElementById(textId);
+      const iconEl = document.getElementById(iconId);
+      const isHidden = box.classList.contains('hidden');
+
+      if (isHidden) {
+        box.classList.remove('hidden');
+        textEl.textContent = '收合招牌菜單';
+        iconEl.className = 'fa-solid fa-chevron-up';
+      } else {
+        box.classList.add('hidden');
+        textEl.textContent = '查看招牌菜單';
+        iconEl.className = 'fa-solid fa-book-open';
+      }
     }
 
     // 複製文字到剪貼簿 (相容 iFrame 與手機瀏覽器)

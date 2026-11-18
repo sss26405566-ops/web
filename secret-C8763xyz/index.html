@@ -63,23 +63,27 @@
     <div class="absolute bottom-0 left-0 -mb-16 -ml-16 w-60 h-60 rounded-full bg-amber-400/10 blur-2xl pointer-events-none"></div>
 
     <div class="max-w-3xl mx-auto px-5 pt-10 pb-9 relative z-10">
-      <!-- 日期與天數膠囊標籤 -->
-      <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-medium text-sky-200 mb-3">
-        <span id="trip-dates" class="bg-white/10 backdrop-blur-md border border-white/15 px-3.5 py-1 rounded-full flex items-center gap-1.5">
-          <!-- JS 自動填入 -->
-        </span>
-        <span id="trip-duration" class="bg-amber-500/20 text-amber-200 border border-amber-400/30 px-3 py-1 rounded-full font-semibold">
-          <!-- JS 自動填入 -->
-        </span>
-      </div>
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+        <div class="flex-1 min-w-0">
+          <!-- 日期與天數膠囊標籤 -->
+          <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-medium text-sky-200 mb-3">
+            <span id="trip-dates" class="bg-white/10 backdrop-blur-md border border-white/15 px-3.5 py-1 rounded-full flex items-center gap-1.5">
+              <!-- JS 自動填入 -->
+            </span>
+            <span id="trip-duration" class="bg-amber-500/20 text-amber-200 border border-amber-400/30 px-3 py-1 rounded-full font-semibold">
+              <!-- JS 自動填入 -->
+            </span>
+          </div>
 
-      <!-- 主標題與副標題 -->
-      <h1 id="trip-title" class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-2.5 leading-snug text-white">
-        <!-- JS 自動填入 -->
-      </h1>
-      <p id="trip-subtitle" class="text-slate-300 text-sm sm:text-base mb-6">
-        <!-- JS 自動填入 -->
-      </p>
+          <!-- 主標題與副標題 -->
+          <h1 id="trip-title" class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-2.5 leading-snug text-white">
+            <!-- JS 自動填入 -->
+          </h1>
+          <p id="trip-subtitle" class="text-slate-300 text-sm sm:text-base mb-5 sm:mb-6">
+            <!-- JS 自動填入 -->
+          </p>
+        </div>
+      </div>
 
       <!-- 底部資訊列與控制按鈕 -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-white/15">
@@ -184,8 +188,37 @@
     <!-- 分頁三：餐廳口袋名單（東京 5 間 ＋ 仙台 3 間）                        -->
     <!-- ===================================================================== -->
     <section id="view-food" class="hidden space-y-5">
-      <div class="flex items-center justify-between text-xs text-slate-500 px-1">
-        <span><i class="fa-solid fa-utensils text-amber-500 mr-1"></i>點擊城市標題可展開／收合，每間店皆可一鍵展開「招牌菜單」</span>
+      <!-- 可愛 Q 版吃貨小插畫橫幅 -->
+      <div class="bg-gradient-to-r from-amber-50 via-orange-50 to-rose-50 border border-amber-200/80 rounded-2xl p-3.5 sm:p-4 flex items-center gap-3.5 shadow-2xs">
+        <div class="w-14 h-14 shrink-0 flex items-center justify-center">
+          <!-- Q版端拉麵與烤牛舌小貓插圖 -->
+          <svg viewBox="0 0 100 100" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="44" fill="#ffffff" stroke="#fed7aa" stroke-width="2" />
+            <!-- 貓耳 -->
+            <path d="M26,34 L22,16 L38,25 Z" fill="#fdba74" stroke="#7c2d12" stroke-width="2" stroke-linejoin="round" />
+            <path d="M74,34 L78,16 L62,25 Z" fill="#fdba74" stroke="#7c2d12" stroke-width="2" stroke-linejoin="round" />
+            <!-- 圓臉 -->
+            <ellipse cx="50" cy="44" rx="24" ry="20" fill="#fff1e6" stroke="#7c2d12" stroke-width="2" />
+            <!-- 幸福眯眯眼 (> <) -->
+            <path d="M36,41 L42,44 L36,47" fill="none" stroke="#7c2d12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M64,41 L58,44 L64,47" fill="none" stroke="#7c2d12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+            <!-- 腮紅與流口水開心嘴 -->
+            <ellipse cx="34" cy="49" rx="4" ry="2.2" fill="#fda4af" />
+            <ellipse cx="66" cy="49" rx="4" ry="2.2" fill="#fda4af" />
+            <path d="M45,50 Q50,57 55,50 Z" fill="#fb7185" stroke="#7c2d12" stroke-width="1.5" />
+            <!-- 拉麵碗 -->
+            <path d="M26,64 L74,64 C72,82 62,88 50,88 C38,88 28,82 26,64 Z" fill="#ef4444" stroke="#7f1d1d" stroke-width="2" />
+            <rect x="33" y="60" width="34" height="4" rx="2" fill="#fde047" />
+            <path d="M36,55 Q34,49 38,45" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M64,55 Q66,49 62,45" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="text-xs sm:text-sm font-bold text-amber-900">「開動啦！東京拉麵燒肉 ＆ 仙台厚切牛舌全攻略」</div>
+          <p class="text-[11px] sm:text-xs text-amber-800/80 mt-0.5 leading-relaxed">
+            點擊下方城市標題可展開／收合，每間店皆可一鍵展開「招牌菜單」查看必點菜色與預算！
+          </p>
+        </div>
       </div>
 
       <!-- 餐廳口袋名單手風琴由 JS 動態渲染 -->
@@ -353,14 +386,14 @@
       {
         day: "Day 1",
         date: "2026/12/26 (六)",
-        title: "桃園機場集合出發・抵達東京淺草",
+        title: "13:30 桃園集合・抵達成田啟用 JR PASS 前往淺草",
         defaultOpen: true, // 預設展開第一天
         items: [
           {
-            time: "13:00",
+            time: "13:30",
             category: "航班",
             name: "桃園國際機場 第二航廈集合",
-            note: "13:00 準時於桃園機場第二航廈集合，辦理登機報到、行李託運與免稅店逛街。",
+            note: "13:30 準時於桃園機場第二航廈集合，辦理登機報到、行李託運與免稅店逛街。",
             mapUrl: "https://www.google.com/maps/search/?api=1&query=桃園國際機場第二航廈"
           },
           {
@@ -372,16 +405,19 @@
           },
           {
             time: "20:30",
-            category: "航班",
-            name: "抵達東京成田國際機場（NRT）",
-            note: "辦理入境手續、領取行李，並至 JR 東日本旅行服務中心領取／兌換「JR PASS 東日本周遊券」，隨後搭乘京成電鐵（Skyliner 或 Access 特急）前往淺草。",
-            mapUrl: "https://www.google.com/maps/search/?api=1&query=成田國際機場"
+            category: "交通",
+            name: "抵達成田機場・立即啟用 JR 東日本 PASS 進東京市區",
+            note: "入境領行李後，至 JR 東日本旅行服務中心兌換並【本日直接啟用】JR 東日本鐵路周遊券（東北地區｜連續5日券 12/26–12/30），搭乘 JR 成田特快 N'EX（全車指定席免費）至東京站，再轉乘 JR 山手線／銀座線前往淺草！",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=JR成田空港駅",
+            linkUrl: JR_PASS_OFFICIAL_URL,
+            linkText: "JR 東日本 PASS 官網／劃位",
+            showJrMapBtn: true
           },
           {
             time: "晚間",
             category: "住宿",
             name: "入住東京住宿：unito ASAKUSA",
-            note: "Hotel Residence Asakusa by unito（淺草區域），辦理入住休息，為明日前往東北做準備。",
+            note: "Hotel Residence Asakusa by unito（淺草區域），辦理入住休息，為明日一早搭新幹線做準備。",
             mapUrl: "https://www.google.com/maps/search/?api=1&query=Hotel+Residence+Asakusa+by+unito",
             linkUrl: "https://www.agoda.com/zh-tw/hotel-residence-asakusa-by-unito/hotel/taito-ku-jp.html?cid=1844104&ds=i8YsThGvGyUKkuJ2",
             linkText: "Agoda 訂房頁面"
@@ -391,24 +427,33 @@
       {
         day: "Day 2",
         date: "2026/12/27 (日)",
-        title: "啟用 JR 東日本 PASS・前往銀山溫泉",
+        title: "從淺草前往上野站搭新幹線・直奔銀山溫泉",
         defaultOpen: false,
         items: [
           {
             time: "上午",
             category: "交通",
-            name: "啟用 JR 東日本鐵路周遊券（東北地區）・搭乘新幹線北上",
-            note: "從上野／東京站搭乘山形新幹線（つばさ Tsubasa 號）前往大石田站，再轉乘接駁巴士前往銀山溫泉。可提前於えきねっと官網劃位指定席！",
-            mapUrl: "https://www.google.com/maps/search/?api=1&query=大石田駅",
+            name: "從 unito ASAKUSA 前往「JR 上野站（新幹線乘車處）」",
+            note: "從住宿步行至地鐵「淺草站」或「田原町站」，搭乘東京地鐵銀座線僅約 5 分鐘即可抵達「上野站」（最推薦搭乘山形新幹線的出發站，動線比東京站更單純！）。點擊下方按鈕可直接開啟從飯店到上野站的導航。",
+            mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Hotel+Residence+Asakusa+by+unito&destination=上野駅+新幹線改札口&travelmode=transit",
+            linkUrl: "https://www.google.com/maps/search/?api=1&query=JR上野駅",
+            linkText: "JR 上野站定位"
+          },
+          {
+            time: "午前",
+            category: "交通",
+            name: "搭乘山形新幹線（つばさ）前往山形站 ➔ 大石田站",
+            note: "持 JR 東日本 PASS 於上野站搭乘山形新幹線（つばさ Tsubasa 號，全車指定席務必先劃位），沿途經過「山形站」並一路搭乘至「大石田站」，出站後轉乘飯店接駁車或路線巴士前往銀山溫泉。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=山形駅",
             linkUrl: JR_PASS_OFFICIAL_URL,
-            linkText: "JR 東日本 PASS 官網／劃位",
-            showJrMapBtn: true // 顯示開啟使用區域地圖按鈕
+            linkText: "えきねっと 劃位官網",
+            showJrMapBtn: true
           },
           {
             time: "下午",
             category: "住宿",
             name: "入住銀山溫泉：銀山莊（Ginzanso）",
-            note: "享受夢幻的冬日銀山溫泉雪景與日式溫泉旅館一泊二食（記得提前確認飯店接駁車時間）。",
+            note: "享受夢幻的冬日銀山溫泉雪景與日式溫泉旅館一泊二食（記得提前確認大石田站飯店接駁車班次）。",
             mapUrl: "https://www.google.com/maps/search/?api=1&query=銀山温泉+銀山荘",
             linkUrl: "https://www.ginzanso.jp/chinese/",
             linkText: "銀山莊中文官網"
@@ -442,11 +487,18 @@
       {
         day: "Day 4",
         date: "2026/12/29 (二)",
-        title: "仙台自由探索（連住第二晚）",
+        title: "仙台自由探索與領取 C109 手環",
         defaultOpen: false,
         items: [
           {
-            time: "全日",
+            time: "上午",
+            category: "活動",
+            name: "仙台蜜瓜書店（メロンブックス 仙台店）領取 C109 入場手環",
+            note: "前往仙台蜜瓜書店領取預購的 Comic Market 109 入場手環，請記得攜帶預約憑證與身分證明文件！",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=メロンブックス仙台店"
+          },
+          {
+            time: "下午",
             category: "活動",
             name: "仙台市區／周邊自由活動",
             note: "可善用 JR PASS 安排日本三景「松島」、藏王狐狸村，或是在仙台市區大啖厚切牛舌（可切換至『🍜 餐廳口袋名單』分頁查看仙台牛舌三巨頭！）。",
@@ -464,20 +516,29 @@
       {
         day: "Day 5",
         date: "2026/12/30 (三)",
-        title: "返回東京・東京鐵塔周邊住宿",
+        title: "下午搭乘新幹線返回東京・晚上入住民宿",
         defaultOpen: false,
         items: [
           {
-            time: "白天",
-            category: "交通",
-            name: "搭乘東北新幹線返回東京市區",
-            note: "退房後從仙台站搭乘東北新幹線（はやぶさ Hayabusa 號）快速返回東京。",
-            mapUrl: "https://www.google.com/maps/search/?api=1&query=東京駅"
+            time: "上午",
+            category: "活動",
+            name: "仙台市區悠閒早午餐・伴手禮採買",
+            note: "退房後可先寄放行李於飯店，在仙台站周邊採買萩之月、毛豆奶昔或再吃一頓牛舌。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=仙台駅"
           },
           {
             time: "下午",
+            category: "交通",
+            name: "下午搭乘東北新幹線返回東京（JR PASS 最後一日）",
+            note: "今天是 5 日券 JR 東日本 PASS 效期最後一天，下午從仙台站搭乘東北新幹線（はやぶさ Hayabusa 號）返回東京。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=東京駅",
+            linkUrl: JR_PASS_OFFICIAL_URL,
+            linkText: "JR 東日本 PASS 劃位"
+          },
+          {
+            time: "晚上",
             category: "住宿",
-            name: "入住東京跨年住宿：【離東京鐵塔很近】東京都心民宿",
+            name: "晚上入住東京跨年住宿：【離東京鐵塔很近】東京都心民宿",
             note: "位於東京都心安靜區域，步行 4 分鐘即可抵達最近車站，連住 12/30–12/31 兩晚。",
             mapUrl: "https://www.google.com/maps/search/?api=1&query=東京鐵塔",
             linkUrl: "https://www.airbnb.com.tw/rooms/1103254122766692464?unique_share_id=b308cdae-228d-49cf-b994-929513d556af&viralityEntryPoint=1&s=76&source_impression_id=p3_1794154109_P3_4kdIk-xfsOWdM",
@@ -510,24 +571,33 @@
       {
         day: "Day 7",
         date: "2027/01/01 (五)",
-        title: "元旦取車自駕・前往河口湖",
+        title: "上午先取車 ➔ 開車遊高尾山 ➔ 開車前往河口湖",
         defaultOpen: false,
         items: [
           {
             time: "上午",
             category: "租車",
-            name: "東京租車取車：NISSAN 租車 武藏新城站前店",
-            note: "地址：2 Chome-15-15 Kamishinjo, Nakahara Ward, Kawasaki, Kanagawa 211-0045日本。⚠️ 取車必備：台灣駕照正本、駕照日文譯本、護照、預約確認單。",
+            name: "第一步｜東京租車取車：NISSAN 租車 武藏新城站前店",
+            note: "地址：2 Chome-15-15 Kamishinjo, Nakahara Ward, Kawasaki, Kanagawa 211-0045日本。⚠️ 取車必備：台灣駕照正本、駕照日文譯本、護照、預約確認單。取車後直接開車上路！",
             mapUrl: "https://www.google.com/maps/search/?api=1&query=2+Chome-15-15+Kamishinjo,+Nakahara+Ward,+Kawasaki,+Kanagawa+211-0045",
             linkUrl: "https://tc.tabirai.net/car/kanagawa/company/nissan/branch/?PID=1948",
             linkText: "Tabirai 租車店鋪資訊"
           },
           {
+            time: "中午",
+            category: "活動",
+            name: "第二步｜開車前往高尾山（新年初詣與登山纜車）",
+            note: "從武藏新城開車走中央自動車道約 45–60 分鐘抵達高尾山（可停高尾山口站周邊市營停車場），搭乘登山纜車俯瞰關東平原並參拜藥王院。",
+            mapUrl: "https://www.google.com/maps/dir/?api=1&origin=2+Chome-15-15+Kamishinjo,+Nakahara+Ward,+Kawasaki,+Kanagawa+211-0045&destination=高尾山口駅&travelmode=driving",
+            linkUrl: "https://www.takao-tozanteitetsu.co.jp/",
+            linkText: "高尾山登山電鐵官網"
+          },
+          {
             time: "下午",
             category: "住宿",
-            name: "自駕前往山梨縣・入住河口湖班鄉間別墅飯店",
-            note: "Kawaguchiko Country Cottage Ban，享受富士山腳下的森林度假別墅風情。",
-            mapUrl: "https://www.google.com/maps/search/?api=1&query=Kawaguchiko+Country+Cottage+Ban",
+            name: "第三步｜開車前往山梨縣・入住河口湖班鄉間別墅飯店",
+            note: "從高尾山繼續沿中央自動車道開車約 60 分鐘直達河口湖，入住 Kawaguchiko Country Cottage Ban，享受富士山腳下的森林度假別墅。",
+            mapUrl: "https://www.google.com/maps/dir/?api=1&origin=高尾山口駅&destination=Kawaguchiko+Country+Cottage+Ban&travelmode=driving",
             linkUrl: "https://www.trip.com/w/dtdNO2lM5X2",
             linkText: "Trip.com 訂房連結"
           }
@@ -582,21 +652,28 @@
       {
         day: "Day 10",
         date: "2027/01/04 (一)",
-        title: "返回神奈川川崎・還車與入住",
+        title: "伊豆自駕返回・晚上還車後入住川崎飯店",
         defaultOpen: false,
         items: [
           {
             time: "白天",
+            category: "活動",
+            name: "伊豆半島最後巡禮・沿海岸線自駕北上",
+            note: "退房後可順遊伊東、熱海或小田原城／箱根周邊享用午餐，下午悠閒開車返回神奈川縣川崎市。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=熱海駅"
+          },
+          {
+            time: "晚上",
             category: "租車",
-            name: "從伊豆自駕返回神奈川縣・歸還 NISSAN 租車",
-            note: "還車前請記得在店鋪附近的加油站加滿油（Regular 汽油），並保留最後一張加油收據供店員確認。",
+            name: "晚上歸還 NISSAN 租車（武藏新城站前店）",
+            note: "還車前請記得在武藏新城店鋪附近的加油站加滿油（Regular 汽油），並保留最後一張加油收據供店員確認。",
             mapUrl: "https://www.google.com/maps/search/?api=1&query=2+Chome-15-15+Kamishinjo,+Nakahara+Ward,+Kawasaki,+Kanagawa+211-0045"
           },
           {
-            time: "下午",
+            time: "晚間",
             category: "住宿",
-            name: "入住川崎住宿：Nesthotel alt Kawasaki Station",
-            note: "Nest Hotel alt 川崎站前（原 Hotel Mid In Kawasaki Ekimae），交通便利，周邊百貨商場林立可做最後採買。",
+            name: "還車後入住川崎住宿：Nesthotel alt Kawasaki Station",
+            note: "搭 JR 南武線從武藏新城站至川崎站僅約 13 分鐘！入住 Nest Hotel alt 川崎站前，周邊百貨與餐廳林立超方便。",
             mapUrl: "https://www.google.com/maps/search/?api=1&query=Nest+Hotel+alt+Kawasaki+Station",
             linkUrl: "https://www.booking.com/hotel/jp/hotel-mid-in-kawasaki-ekimae.zh-tw.html",
             linkText: "Booking.com 訂房頁面"
@@ -657,16 +734,16 @@
       {
         badge: "去程＆回程航班",
         badgeColor: "bg-sky-100 text-sky-700",
-        title: "12/26 (六) 去程 16:25 起飛 ｜ 01/05 (二) 回程 19:30 起飛",
-        details: "去程：13:00 桃園機場第二航廈集合 ➔ 16:25 起飛 ➔ 20:30 抵達成田機場。\n回程：01/05 19:30 成田機場起飛返回台灣。",
+        title: "12/26 (六) 13:30 集合 / 16:25 起飛 ｜ 01/05 (二) 19:30 起飛",
+        details: "去程：13:30 桃園機場第二航廈集合 ➔ 16:25 起飛 ➔ 20:30 抵達成田機場。\n回程：01/05 19:30 成田機場起飛返回台灣。",
         copyText: "",
         mapUrl: "https://www.google.com/maps/search/?api=1&query=桃園國際機場第二航廈"
       },
       {
         badge: "鐵路周遊券",
         badgeColor: "bg-emerald-100 text-emerald-700",
-        title: "JR 東日本鐵路周遊券（東北地區｜12/27 啟用）",
-        details: "12/26 晚間於成田機場領取兌換，12/27 正式啟用搭乘新幹線前往大石田（銀山溫泉）、仙台及返回東京。",
+        title: "JR 東日本鐵路周遊券（東北地區｜12/26 晚間啟用 ～ 12/30）",
+        details: "12/26 20:30 抵達成田機場後立即領取並啟用（連續 5 日券：12/26–12/30），當晚即可免費搭 N'EX 進東京市區；12/27 由上野搭山形新幹線經山形站往大石田（銀山溫泉），12/30 下午由仙台搭新幹線返東京。",
         copyText: "",
         mapUrl: "",
         linkUrl: JR_PASS_OFFICIAL_URL,
@@ -676,7 +753,7 @@
       {
         badge: "自駕租車",
         badgeColor: "bg-amber-100 text-amber-800",
-        title: "NISSAN 租車 武藏新城站前店（1/1 取車 ～ 1/4 還車）",
+        title: "NISSAN 租車 武藏新城站前店（1/1 上午取車 ～ 1/4 晚上還車）",
         details: "地址：2 Chome-15-15 Kamishinjo, Nakahara Ward, Kawasaki, Kanagawa 211-0045日本（取車必備：台灣駕照正本＋日文譯本＋護照）。",
         copyText: "2 Chome-15-15 Kamishinjo, Nakahara Ward, Kawasaki, Kanagawa 211-0045日本",
         mapUrl: "https://www.google.com/maps/search/?api=1&query=2+Chome-15-15+Kamishinjo,+Nakahara+Ward,+Kawasaki,+Kanagawa+211-0045",
@@ -685,63 +762,98 @@
       }
     ];
 
-    // 4. 全程住宿總覽資料 (7 間住宿)
+    // 4. 全程住宿總覽資料 (7 間住宿｜車站優先對應 JR 東日本 PASS 適用車站)
     const accommodationsData = [
       {
         dates: "12/26 (六)｜1 晚",
         area: "東京・淺草",
         name: "unito ASAKUSA (Hotel Residence Asakusa by unito)",
-        note: "抵達首晚住宿，方便隔日一早前往上野搭新幹線。",
+        note: "抵達首晚住宿，隔日一早前往 JR 上野站搭山形新幹線最順暢。",
         mapUrl: "https://www.google.com/maps/search/?api=1&query=Hotel+Residence+Asakusa+by+unito",
-        bookingUrl: "https://www.agoda.com/zh-tw/hotel-residence-asakusa-by-unito/hotel/taito-ku-jp.html?cid=1844104&ds=i8YsThGvGyUKkuJ2"
+        bookingUrl: "https://www.agoda.com/zh-tw/hotel-residence-asakusa-by-unito/hotel/taito-ku-jp.html?cid=1844104&ds=i8YsThGvGyUKkuJ2",
+        stationLabel: "最近 JR 站（JR 上野站｜PASS可用）",
+        stationUrl: "https://www.google.com/maps/search/?api=1&query=JR上野駅",
+        uniqloUrl: "https://www.google.com/maps/search/?api=1&query=UNIQLO+浅草店+Hotel+Residence+Asakusa+by+unito",
+        donkiUrl: "https://www.google.com/maps/search/?api=1&query=ドン・キホーテ+浅草店+Hotel+Residence+Asakusa+by+unito",
+        supermarketUrl: "https://www.google.com/maps/search/?api=1&query=スーパーマーケット+業務スーパー+ライフ+Hotel+Residence+Asakusa+by+unito"
       },
       {
         dates: "12/27 (日)｜1 晚",
         area: "山形・銀山溫泉",
         name: "銀山莊 (Ginzanso)",
-        note: "冬日溫泉旅館一泊二食，享受絕美銀山雪景。",
+        note: "冬日溫泉旅館一泊二食，享受絕美銀山雪景（山區無大型量販，以下為尾花澤／大石田周邊最近超市）。",
         mapUrl: "https://www.google.com/maps/search/?api=1&query=銀山温泉+銀山荘",
-        bookingUrl: "https://www.ginzanso.jp/chinese/"
+        bookingUrl: "https://www.ginzanso.jp/chinese/",
+        stationLabel: "最近 JR 站（JR 大石田站｜PASS可用）",
+        stationUrl: "https://www.google.com/maps/search/?api=1&query=大石田駅",
+        uniqloUrl: "https://www.google.com/maps/search/?api=1&query=UNIQLO+銀山温泉+銀山荘",
+        donkiUrl: "https://www.google.com/maps/search/?api=1&query=ドン・キホーテ+銀山温泉+銀山荘",
+        supermarketUrl: "https://www.google.com/maps/search/?api=1&query=スーパーマーケット+ヤマザワ+銀山温泉"
       },
       {
         dates: "12/28 (一) – 12/29 (二)｜2 晚",
         area: "宮城・仙台市區",
         name: "KOKO HOTEL Sendai Kotodai Park",
-        note: "鄰近勾當台公園與一番町商店街，吃牛舌逛街超方便。",
+        note: "鄰近勾當台公園與一番町商店街，吃牛舌逛街超方便（JR 仙台站為新幹線樞紐）。",
         mapUrl: "https://www.google.com/maps/search/?api=1&query=KOKO+HOTEL+Sendai+Kotodai+Park",
-        bookingUrl: "https://www.polaris-hotels.com/"
+        bookingUrl: "https://www.polaris-hotels.com/",
+        stationLabel: "最近 JR 站（JR 仙台站｜PASS可用）",
+        stationUrl: "https://www.google.com/maps/search/?api=1&query=JR仙台駅",
+        uniqloUrl: "https://www.google.com/maps/search/?api=1&query=UNIQLO+KOKO+HOTEL+Sendai+Kotodai+Park",
+        donkiUrl: "https://www.google.com/maps/search/?api=1&query=ドン・キホーテ+KOKO+HOTEL+Sendai+Kotodai+Park",
+        supermarketUrl: "https://www.google.com/maps/search/?api=1&query=スーパーマーケット+西友+イオン+KOKO+HOTEL+Sendai+Kotodai+Park"
       },
       {
         dates: "12/30 (三) – 12/31 (四)｜2 晚",
         area: "東京・東京鐵塔周邊",
         name: "【離東京鐵塔很近】東京都心民宿",
-        note: "步行 4 分鐘抵達最近車站，跨年與 C109 期間據點。",
+        note: "步行 4 分鐘抵達地鐵站；若使用 JR PASS（12/30 當天可用）最近為 JR 濱松町站。",
         mapUrl: "https://www.google.com/maps/search/?api=1&query=東京鐵塔",
-        bookingUrl: "https://www.airbnb.com.tw/rooms/1103254122766692464?unique_share_id=b308cdae-228d-49cf-b994-929513d556af&viralityEntryPoint=1&s=76&source_impression_id=p3_1794154109_P3_4kdIk-xfsOWdM"
+        bookingUrl: "https://www.airbnb.com.tw/rooms/1103254122766692464?unique_share_id=b308cdae-228d-49cf-b994-929513d556af&viralityEntryPoint=1&s=76&source_impression_id=p3_1794154109_P3_4kdIk-xfsOWdM",
+        stationLabel: "最近 JR 站（JR 濱松町站｜PASS可用）",
+        stationUrl: "https://www.google.com/maps/search/?api=1&query=JR浜松町駅",
+        uniqloUrl: "https://www.google.com/maps/search/?api=1&query=UNIQLO+東京タワー",
+        donkiUrl: "https://www.google.com/maps/search/?api=1&query=ドン・キホーテ+東京タワー",
+        supermarketUrl: "https://www.google.com/maps/search/?api=1&query=スーパーマーケット+成城石井+まいばすけっと+東京タワー"
       },
       {
         dates: "01/01 (五)｜1 晚",
         area: "山梨・河口湖",
         name: "河口湖班鄉間別墅飯店 (Kawaguchiko Country Cottage Ban)",
-        note: "自駕首日入住富士山腳下的森林度假別墅。",
+        note: "自駕首日入住富士山腳下的森林度假別墅，距離富士急行線河口湖站車程約 10 分鐘。",
         mapUrl: "https://www.google.com/maps/search/?api=1&query=Kawaguchiko+Country+Cottage+Ban",
-        bookingUrl: "https://www.trip.com/w/dtdNO2lM5X2"
+        bookingUrl: "https://www.trip.com/w/dtdNO2lM5X2",
+        stationLabel: "最近車站（河口湖站）",
+        stationUrl: "https://www.google.com/maps/search/?api=1&query=河口湖駅",
+        uniqloUrl: "https://www.google.com/maps/search/?api=1&query=UNIQLO+Kawaguchiko+Country+Cottage+Ban",
+        donkiUrl: "https://www.google.com/maps/search/?api=1&query=ドン・キホーテ+Kawaguchiko+Country+Cottage+Ban",
+        supermarketUrl: "https://www.google.com/maps/search/?api=1&query=オギノ+河口湖店+スーパーマーケット"
       },
       {
         dates: "01/02 (六) – 01/03 (日)｜2 晚",
         area: "靜岡・伊豆大室山",
         name: "包場溫泉與暖桌｜大室山城崎包場客房套房",
-        note: "距離海邊 1 分鐘路程（2 間臥室、2 間廁所），富戶站免費接送。",
+        note: "距離海邊 1 分鐘路程（2 間臥室、2 間廁所），鄰近伊豆急行線富戶站（提供免費接送）。",
         mapUrl: "https://www.google.com/maps/search/?api=1&query=城ヶ崎海岸+富戸駅",
-        bookingUrl: "https://www.airbnb.com.tw/rooms/44198916?guests=1&adults=1&s=67&unique_share_id=643d9260-7f78-4a92-a9fa-94045ed31472"
+        bookingUrl: "https://www.airbnb.com.tw/rooms/44198916?guests=1&adults=1&s=67&unique_share_id=643d9260-7f78-4a92-a9fa-94045ed31472",
+        stationLabel: "最近車站（富戶站）",
+        stationUrl: "https://www.google.com/maps/search/?api=1&query=富戸駅",
+        uniqloUrl: "https://www.google.com/maps/search/?api=1&query=UNIQLO+伊東+富戸駅",
+        donkiUrl: "https://www.google.com/maps/search/?api=1&query=ドン・キホーテ+伊東+富戸駅",
+        supermarketUrl: "https://www.google.com/maps/search/?api=1&query=マックスバリュ+フードストアあおき+伊東+富戸駅"
       },
       {
         dates: "01/04 (一)｜1 晚",
         area: "神奈川・川崎站前",
         name: "Nesthotel alt Kawasaki Station",
-        note: "還車後入住川崎站前飯店，方便隔日前往銀座與機場。",
+        note: "還車後入住川崎站前飯店，步行數分鐘即達川崎站，周邊百貨與餐廳林立超方便。",
         mapUrl: "https://www.google.com/maps/search/?api=1&query=Nest+Hotel+alt+Kawasaki+Station",
-        bookingUrl: "https://www.booking.com/hotel/jp/hotel-mid-in-kawasaki-ekimae.zh-tw.html"
+        bookingUrl: "https://www.booking.com/hotel/jp/hotel-mid-in-kawasaki-ekimae.zh-tw.html",
+        stationLabel: "最近車站（川崎站）",
+        stationUrl: "https://www.google.com/maps/search/?api=1&query=川崎駅",
+        uniqloUrl: "https://www.google.com/maps/search/?api=1&query=UNIQLO+Nest+Hotel+alt+Kawasaki+Station",
+        donkiUrl: "https://www.google.com/maps/search/?api=1&query=ドン・キホーテ+Nest+Hotel+alt+Kawasaki+Station",
+        supermarketUrl: "https://www.google.com/maps/search/?api=1&query=スーパーマーケット+ライフ+業務スーパー+川崎駅"
       }
     ];
 
@@ -762,7 +874,7 @@
       {
         cityId: "tokyo",
         cityTitle: "🗼 東京美食口袋名單",
-        citySubtitle: "上野・澀谷・六本木・銀座（共 5 間精選）",
+        citySubtitle: "上野・澀谷・六本木・銀座（共 7 間精選）",
         badgeBg: "bg-rose-600",
         defaultOpen: true,
         spots: [
@@ -780,6 +892,38 @@
               { name: "鴨コンフィ麺（油封鴨腿拉麵）", price: "約 ¥1,260", desc: "整隻慢火油封鴨腿＋特製鴨肉雲吞，肉量滿足" },
               { name: "飲める親子丼（滑蛋鴨肉親子丼）", price: "約 ¥420", desc: "入口即化的半熟濃郁蛋液搭配炭香鴨肉丁，必點副食" },
               { name: "每月限定蔥三選二（免費自選）", price: "免費", desc: "如丸太白蔥、國產九條蔥、細蔥等每月輪替" }
+            ]
+          },
+          {
+            name: "薩莉亞 上野廣小路店（サイゼリヤ 上野広小路店）",
+            area: "上野",
+            tag: "高CP值義式料理・平價首選",
+            highlight: "日本超人氣平價義大利餐廳，招牌多利亞焗飯與紅酒燉牛肉物美價廉，深夜覓食好去處！",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=サイゼリヤ+上野広小路店",
+            officialUrl: "https://www.saizeriya.co.jp/",
+            officialLabel: "日本薩莉亞官網",
+            menuNote: "平板點餐，價格實惠且營業時間長",
+            menuItems: [
+              { name: "ミラノ風ドリア（米蘭風肉醬焗飯）", price: "約 ¥300", desc: "經典招牌國民美食，濃郁白醬與肉醬超對味" },
+              { name: "辛味チキン（香辣烤雞翅）", price: "約 ¥300", desc: "微辣涮嘴的炭香烤雞翅（5支）" },
+              { name: "熟成ミラノサラミ（熟成米蘭沙拉米香腸）", price: "約 ¥300", desc: "鹹香濃郁的義式切片沙拉米，配酒絕佳" },
+              { name: "プチフォッカ（小Focaccia義式扁麵包）", price: "約 ¥150", desc: "沾著焗飯醬汁吃最美味" }
+            ]
+          },
+          {
+            name: "松屋 上野店（松屋 上野店）",
+            area: "上野",
+            tag: "24小時國民牛丼・早餐消夜",
+            highlight: "日本三大牛丼連鎖之一，招牌原味牛めし附免費味噌湯，提供豐富定食與咖哩選項。",
+            mapUrl: "https://www.google.com/maps/search/?api=1&query=松屋+上野店",
+            officialUrl: "https://www.matsuyafoods.co.jp/matsuya/",
+            officialLabel: "日本松屋官網",
+            menuNote: "店門口食券機點餐（支援各種電子支付與IC卡）",
+            menuItems: [
+              { name: "牛めし 並盛（招牌牛丼 附味噌湯）", price: "約 ¥430", desc: "香嫩牛肉片鋪在熱白飯上，隨附熱騰騰味噌湯" },
+              { name: "ネギたま牛めし（蔥玉牛丼）", price: "約 ¥580", desc: "滿滿清脆青蔥淋上特製美乃滋與半熟生蛋黃" },
+              { name: "カルビ焼肉定食（牛五花燒肉定食）", price: "約 ¥730", desc: "現烤燒肉搭配生菜沙拉與白飯，份量滿足" },
+              { name: "ソーセージエッグ定食（香腸煎蛋朝食）", price: "約 ¥490", desc: "經典日式活力早餐（供應至上午 11 點）" }
             ]
           },
           {
@@ -962,6 +1106,30 @@
               <ol class="space-y-1.5 text-xs text-slate-700 list-decimal list-inside">
                 ${item.menuItems.map(m => `<li class="leading-relaxed">${m}</li>`).join('')}
               </ol>
+            </div>
+          ` : '';
+
+          // 若該行程帶有可愛 Q 版應援小貼圖 (如 Day 6 C109)
+          const chibiStickerHTML = item.showChibiSticker ? `
+            <div class="mt-2.5 mb-3 bg-sky-50/80 border border-sky-200/90 rounded-xl p-3 flex items-center gap-3">
+              <div class="w-12 h-12 shrink-0">
+                <svg viewBox="0 0 100 100" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="50" cy="50" r="45" fill="#ffffff" stroke="#bae6fd" stroke-width="2" />
+                  <ellipse cx="50" cy="14" rx="15" ry="3.5" fill="none" stroke="#eab308" stroke-width="2.5" />
+                  <path d="M27,36 C17,28 19,17 30,23 Z" fill="#fed7aa" stroke="#7c2d12" stroke-width="2" />
+                  <path d="M73,36 C83,28 81,17 70,23 Z" fill="#fed7aa" stroke="#7c2d12" stroke-width="2" />
+                  <ellipse cx="50" cy="48" rx="22" ry="19" fill="#fff1e6" stroke="#7c2d12" stroke-width="2" />
+                  <circle cx="40" cy="48" r="3.5" fill="#1e3a8a" />
+                  <circle cx="60" cy="48" r="3.5" fill="#1e3a8a" />
+                  <path d="M45,54 Q47.5,57 50,54 Q52.5,57 55,54" fill="none" stroke="#7c2d12" stroke-width="2" stroke-linecap="round" />
+                  <rect x="32" y="67" width="36" height="22" rx="6" fill="#38bdf8" stroke="#0369a1" stroke-width="1.8" />
+                  <text x="50" y="82" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">C109</text>
+                </svg>
+              </div>
+              <div class="text-xs text-sky-950 leading-relaxed">
+                <span class="font-bold text-sky-700">✨ 冬コミ逛攤應援小卡：</span>
+                已附上 <a href="https://x.com/horuhara" target="_blank" rel="noopener noreferrer" class="underline font-bold text-brand-700 hover:text-brand-900">@horuhara</a> 老師的 X 連結，出發前可直接點按鈕確認最新攤位編號與新刊清單！
+              </div>
             </div>
           ` : '';
 
@@ -1185,13 +1353,33 @@
       const container = document.getElementById('accommodations-container');
       container.innerHTML = accommodationsData.map(h => `
         <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
-          <div class="space-y-1">
+          <div class="space-y-1.5 flex-1 min-w-0">
             <div class="flex flex-wrap items-center gap-2">
               <span class="text-xs font-bold text-indigo-700 bg-indigo-100/80 px-2.5 py-0.5 rounded-md">${h.dates}</span>
               <span class="text-xs font-semibold text-slate-500"><i class="fa-solid fa-map-pin mr-1"></i>${h.area}</span>
             </div>
-            <h3 class="text-sm sm:text-base font-bold text-slate-800">${h.name}</h3>
-            <p class="text-xs text-slate-600">${h.note}</p>
+            <h3 class="text-sm sm:text-base font-bold text-slate-800 leading-snug">${h.name}</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">${h.note}</p>
+
+            <!-- 最近車站、UNIQLO、唐吉軻德與量販店超市 快捷搜尋按鈕列 -->
+            <div class="flex flex-wrap items-center gap-2 pt-1.5">
+              <a href="${h.stationUrl}" target="_blank" rel="noopener noreferrer" 
+                 class="inline-flex items-center gap-1.5 text-xs font-bold text-sky-800 bg-sky-50 hover:bg-sky-100 border border-sky-200 px-2.5 py-1 rounded-lg transition-colors">
+                <i class="fa-solid fa-train-subway text-sky-600"></i> ${h.stationLabel || '最近車站'}
+              </a>
+              <a href="${h.uniqloUrl}" target="_blank" rel="noopener noreferrer" 
+                 class="inline-flex items-center gap-1.5 text-xs font-bold text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-2.5 py-1 rounded-lg transition-colors">
+                <i class="fa-solid fa-shirt text-red-600"></i> 最近 UNIQLO
+              </a>
+              <a href="${h.donkiUrl}" target="_blank" rel="noopener noreferrer" 
+                 class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-900 bg-amber-100/90 hover:bg-amber-200 border border-amber-300 px-2.5 py-1 rounded-lg transition-colors">
+                <i class="fa-solid fa-bag-shopping text-amber-700"></i> 最近唐吉軻德
+              </a>
+              <a href="${h.supermarketUrl}" target="_blank" rel="noopener noreferrer" 
+                 class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg transition-colors">
+                <i class="fa-solid fa-cart-shopping text-emerald-600"></i> 最近量販店超市
+              </a>
+            </div>
           </div>
           
           <div class="flex flex-wrap sm:flex-col gap-2 shrink-0">
